@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.mobiapps.recipekeeper.ui.dashboard.DashboardFragment"
+        android:label="Recipe Keeper"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboard_to_creator"
+            app:destination="@id/recipeCreatorFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_viewer"
+            app:destination="@id/recipeViewerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipeCreatorFragment"
+        android:name="com.mobiapps.recipekeeper.ui.creator.RecipeCreatorFragment"
+        android:label="New Recipe"
+        tools:layout="@layout/fragment_recipe_creator" />
+
+    <fragment
+        android:id="@+id/recipeViewerFragment"
+        android:name="com.mobiapps.recipekeeper.ui.viewer.RecipeViewerFragment"
+        android:label="Recipe"
+        tools:layout="@layout/fragment_recipe_viewer">
+        <argument
+            android:name="recipeId"
+            app:argType="string" />
+    </fragment>
+</navigation>
