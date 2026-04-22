@@ -51,7 +51,7 @@ class DashboardFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.filteredRecipes.collect { recipes ->
                     adapter.submitList(recipes)
-                    binding.tvEmptyState.visibility = if (recipes.isEmpty()) View.VISIBLE else View.GONE
+                    binding.emptyStateContainer.visibility = if (recipes.isEmpty()) View.VISIBLE else View.GONE
                     binding.recyclerRecipes.visibility = if (recipes.isEmpty()) View.GONE else View.VISIBLE
                 }
             }

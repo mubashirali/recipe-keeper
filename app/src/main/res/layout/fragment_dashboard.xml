@@ -3,45 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:liftOnScroll="true">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Recipe Keeper" />
-    </com.google.android.material.appbar.AppBarLayout>
+            app:title="Recipe Keeper"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
-    <!--
-      CRITICAL FIX: Use a LinearLayout as the content container.
-      layout_weight works in LinearLayout (not in CoordinatorLayout).
-      The LinearLayout takes the appbar_scrolling_view_behavior to sit below the AppBarLayout.
-    -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="4dp"
-            android:queryHint="Search recipes..." />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOutlineVariant">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="Search your recipes..."
+                app:searchIcon="@null" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <HorizontalScrollView
             android:id="@+id/tagsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="12dp"
             android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
@@ -50,40 +57,56 @@
                 android:layout_height="wrap_content"
                 app:chipSpacing="8dp"
                 app:singleSelection="true"
+                app:selectionRequired="true"
                 app:singleLine="true" />
 
         </HorizontalScrollView>
 
-        <!-- EMPTY STATE: shown when recipe list is empty -->
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="88dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:id="@+id/empty_state_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <TextView
             android:id="@+id/tv_empty_state"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="No recipes yet.\nTap + to add your first recipe."
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textAlignment="center"
-            android:visibility="gone" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No recipes found"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <!-- layout_weight="1" works here because parent is LinearLayout -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_recipes"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false" />
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Try a different search or add a new recipe"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_add_recipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Add Recipe"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:text="New Recipe"
+        app:icon="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,23 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.RecipeKeeper" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize color scheme here in Phase 1 if desired -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_variant</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+
+        <!-- Component styles -->
+        <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
+        <item name="chipStyle">@style/Widget.Material3.Chip.Assist.Elevated</item>
     </style>
 </resources>

@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.chip.Chip
 import com.mobiapps.recipekeeper.R
 import com.mobiapps.recipekeeper.databinding.FragmentRecipeViewerBinding
 import com.mobiapps.recipekeeper.domain.model.Recipe
@@ -51,15 +52,16 @@ class RecipeViewerFragment : Fragment() {
     private fun displayRecipe(recipe: Recipe) {
         binding.tvTitle.text = recipe.title
         binding.tvDescription.text = if (recipe.description.isNotEmpty()) recipe.description else "No description provided"
-        binding.tvPrepTime.text = "${recipe.prepTimeMinutes} min"
-        binding.tvServings.text = "${recipe.servings} servings"
+        binding.tvPrepTime.text = "${recipe.prepTimeMinutes} mins"
+        binding.tvServings.text = if (recipe.servings == 1) "1 person" else "${recipe.servings} people"
 
         // Clear existing views and add ingredient items
         binding.containerIngredients.removeAllViews()
         recipe.ingredients.forEach { ingredient ->
             val textView = TextView(requireContext()).apply {
-                text = "• ${ingredient.quantity} ${ingredient.unit} ${ingredient.name}"
-                setTextAppearance(android.R.style.TextAppearance_Small)
+                text = "${ingredient.quantity} ${ingredient.unit} ${ingredient.name}"
+                setPadding(0, 8, 0, 8)
+                setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyLarge)
             }
             binding.containerIngredients.addView(textView)
         }
@@ -71,13 +73,12 @@ class RecipeViewerFragment : Fragment() {
         binding.tvInstructions.text = if (recipe.instructions.isNotEmpty()) instructionsText else "No instructions provided"
 
         // Display tags
-        val tagsText = recipe.tags.joinToString(separator = " ") { "#$it" }
-        // Clear existing chips and add tag chips
         binding.chipGroupTags.removeAllViews()
         recipe.tags.forEach { tag ->
-            val chip = com.google.android.material.chip.Chip(requireContext()).apply {
-                text = "#$tag"
-                setChipBackgroundColorResource(R.color.chip_background)
+            val chip = Chip(requireContext()).apply {
+                text = tag
+                isClickable = false
+                isCheckable = false
             }
             binding.chipGroupTags.addView(chip)
         }
