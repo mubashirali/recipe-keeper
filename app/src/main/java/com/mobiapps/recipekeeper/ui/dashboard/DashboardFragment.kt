@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,14 +40,13 @@ class DashboardFragment : Fragment() {
 
         // Setup RecyclerView
         adapter = RecipeAdapter { recipe ->
-            // Navigate to recipe viewer when item is clicked
             val action = DashboardFragmentDirections.actionDashboardToViewer(recipe.id)
             findNavController().navigate(action)
         }
         binding.recyclerRecipes.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerRecipes.adapter = adapter
 
-        // Observe filtered recipes from ViewModel
+        // Observe filtered recipes
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.filteredRecipes.collect { recipes ->
@@ -57,7 +57,7 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Observe all tags for chip display
+        // Observe all tags
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allTags.collect { tags ->
@@ -66,8 +66,8 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Setup search functionality
-        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        // Setup search
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.setSearchQuery(query ?: "")
                 return true
@@ -86,18 +86,16 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setupTagChips(tags: List<String>) {
-        // Clear existing chips
+        val context = ContextThemeWrapper(requireContext(), R.style.Widget_RecipeKeeper_TagChip)
         binding.tagChipGroup.removeAllViews()
 
-        // Add "All" chip (selected by default)
-        val allChip = Chip(requireContext()).apply {
-            text = "All"
-            isChecked = true
-            setChipBackgroundColorResource(R.color.chip_background)
+        // Add "All" chip
+        val allChip = Chip(context).apply {
+            text = "All Recipes"
+            isCheckable = true
+            isChecked = viewModel.selectedTag.value.isEmpty()
+            id = View.generateViewId()
             setOnClickListener {
-                // Clear selection from other chips
-                binding.tagChipGroup.clearCheck()
-                isChecked = true
                 viewModel.setSelectedTag("")
             }
         }
@@ -105,13 +103,12 @@ class DashboardFragment : Fragment() {
 
         // Add chips for each tag
         tags.forEach { tag ->
-            val chip = Chip(requireContext()).apply {
-                text = "#$tag"
-                setChipBackgroundColorResource(R.color.chip_background)
+            val chip = Chip(context).apply {
+                text = tag
+                isCheckable = true
+                isChecked = viewModel.selectedTag.value == tag
+                id = View.generateViewId()
                 setOnClickListener {
-                    // Clear selection from other chips
-                    binding.tagChipGroup.clearCheck()
-                    isChecked = true
                     viewModel.setSelectedTag(tag)
                 }
             }
