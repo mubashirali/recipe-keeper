@@ -43,15 +43,38 @@
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="#99000000"
                 app:strokeWidth="0dp">
-                <TextView
-                    android:id="@+id/tvDifficulty"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:text="Medium"
-                    android:textColor="@color/white"
-                    android:textAppearance="?attr/textAppearanceLabelSmall" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="4dp">
+                    <TextView
+                        android:id="@+id/tvDifficulty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="4dp"
+                        android:text="Medium"
+                        android:textColor="@color/white"
+                        android:textAppearance="?attr/textAppearanceLabelSmall" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="12dp"
+                        android:background="#66FFFFFF"
+                        android:layout_marginHorizontal="2dp"/>
+
+                    <ImageButton
+                        android:id="@+id/btnDelete"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_menu_delete"
+                        app:tint="@color/white"
+                        android:padding="4dp"
+                        android:scaleType="centerInside"/>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

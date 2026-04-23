@@ -73,6 +73,7 @@ class RecipeAdapter(
             }
 
             binding.root.setOnClickListener { onRecipeClick(recipe) }
+            binding.btnDelete.setOnClickListener { onDeleteClick(recipe) }
         }
     }
 }
