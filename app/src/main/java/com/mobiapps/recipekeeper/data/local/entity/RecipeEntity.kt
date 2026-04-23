@@ -13,6 +13,8 @@ data class RecipeEntity(
     val servings: Int,             // Non-null; required
     val instructions: List<String>, // Stored as JSON via Converters.kt
     val tags: List<String>,        // Stored as JSON via Converters.kt
+    val imagePath: String?,
+    val difficulty: String,
     val createdAt: Long,           // epoch millis
     val updatedAt: Long
 )

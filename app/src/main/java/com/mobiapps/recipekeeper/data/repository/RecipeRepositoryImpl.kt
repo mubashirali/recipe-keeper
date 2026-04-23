@@ -44,6 +44,8 @@ private fun RecipeWithIngredients.toDomain() = Recipe(
     servings = recipe.servings,
     instructions = recipe.instructions,  // List<String>; Room invokes Converters.kt
     tags = recipe.tags,                   // List<String>; Room invokes Converters.kt
+    imagePath = recipe.imagePath,
+    difficulty = recipe.difficulty,
     ingredients = ingredients.map(IngredientEntity::toDomain),
     createdAt = recipe.createdAt,
     updatedAt = recipe.updatedAt
@@ -59,6 +61,8 @@ private fun Recipe.toEntity() = RecipeEntity(
     prepTimeMinutes = prepTimeMinutes, servings = servings,
     instructions = instructions,  // List<String>; Room invokes Converters.kt
     tags = tags,                   // List<String>; Room invokes Converters.kt
+    imagePath = imagePath,
+    difficulty = difficulty,
     createdAt = createdAt, updatedAt = updatedAt
 )
 

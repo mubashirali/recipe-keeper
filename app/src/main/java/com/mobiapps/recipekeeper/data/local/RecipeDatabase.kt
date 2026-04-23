@@ -3,6 +3,8 @@ package com.mobiapps.recipekeeper.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mobiapps.recipekeeper.data.local.converter.Converters
 import com.mobiapps.recipekeeper.data.local.dao.IngredientDao
 import com.mobiapps.recipekeeper.data.local.dao.RecipeDao
@@ -11,11 +13,20 @@ import com.mobiapps.recipekeeper.data.local.entity.RecipeEntity
 
 @Database(
     entities = [RecipeEntity::class, IngredientEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
     abstract fun ingredientDao(): IngredientDao
+
+    companion object {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipes ADD COLUMN imagePath TEXT")
+                db.execSQL("ALTER TABLE recipes ADD COLUMN difficulty TEXT NOT NULL DEFAULT 'Medium'")
+            }
+        }
+    }
 }

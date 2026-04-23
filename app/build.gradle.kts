@@ -74,6 +74,9 @@ dependencies {
     // kotlinx.serialization (Room TypeConverters)
     implementation(libs.kotlinx.serialization.json)
 
+    // Image loading
+    implementation(libs.coil)
+
     // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

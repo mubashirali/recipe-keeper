@@ -32,19 +32,50 @@
             android:padding="20dp">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.RecipeKeeper.CardView"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSurfaceVariant">
+                    <ImageView
+                        android:id="@+id/iv_recipe_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:padding="48dp"
+                        android:src="@drawable/ic_chef_hat"
+                        app:tint="?attr/colorPrimary" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_take_photo"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:text="Add Photo"
+                        app:icon="@android:drawable/ic_menu_camera" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutlineVariant">
+                style="@style/Widget.RecipeKeeper.CardView"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -52,6 +83,7 @@
                         android:text="General Info"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -60,8 +92,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Recipe Title *"
-                        android:layout_marginBottom="12dp"
-                        app:startIconDrawable="@android:drawable/ic_menu_edit">
+                        android:layout_marginBottom="16dp"
+                        app:startIconDrawable="@drawable/ic_edit">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_title"
                             android:layout_width="match_parent"
@@ -75,7 +107,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Description"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="16dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_description"
                             android:layout_width="match_parent"
@@ -104,20 +136,56 @@
                                 android:inputType="number" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_servings"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                            android:layout_width="0dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_servings"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Servings *">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_servings"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Servings *">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/et_servings"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="number" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Difficulty"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_easy"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Easy" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_medium"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Medium"
+                        android:checked="true" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_hard"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hard" />
+                </com.google.android.material.chip.ChipGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -125,8 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                style="@style/Widget.RecipeKeeper.CardView"
                 app:strokeWidth="1dp"
                 app:strokeColor="?attr/colorOutlineVariant">
 
@@ -148,7 +215,8 @@
                             android:layout_weight="1"
                             android:text="Ingredients"
                             android:textAppearance="?attr/textAppearanceTitleMedium"
-                            android:textColor="?attr/colorPrimary" />
+                            android:textColor="?attr/colorPrimary"
+                            android:textStyle="bold" />
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_add_ingredient"
                             style="@style/Widget.Material3.Button.TextButton"
@@ -170,8 +238,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                style="@style/Widget.RecipeKeeper.CardView"
                 app:strokeWidth="1dp"
                 app:strokeColor="?attr/colorOutlineVariant">
 
@@ -187,6 +254,7 @@
                         android:text="Instructions"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -209,8 +277,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                style="@style/Widget.RecipeKeeper.CardView"
                 app:strokeWidth="1dp"
                 app:strokeColor="?attr/colorOutlineVariant">
 
@@ -226,6 +293,7 @@
                         android:text="Tags"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.textfield.TextInputLayout

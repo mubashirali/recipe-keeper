@@ -10,6 +10,8 @@ data class Recipe(
     val instructions: List<String>,
     val tags: List<String>,
     val ingredients: List<Ingredient>,
+    val imagePath: String? = null,
+    val difficulty: String = "Medium", // Easy, Medium, Hard
     val createdAt: Long,
     val updatedAt: Long
 )

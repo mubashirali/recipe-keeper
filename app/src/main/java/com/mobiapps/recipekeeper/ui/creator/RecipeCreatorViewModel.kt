@@ -46,7 +46,9 @@ class RecipeCreatorViewModel @Inject constructor(
         servings: Int,
         ingredients: List<Pair<String, Pair<String, String>>>,
         instructions: List<String>,
-        tags: List<String>
+        tags: List<String>,
+        imagePath: String? = null,
+        difficulty: String = "Medium"
     ) {
         viewModelScope.launch {
             _saveState.value = SaveState.Saving
@@ -73,6 +75,8 @@ class RecipeCreatorViewModel @Inject constructor(
                     },
                     instructions = instructions,
                     tags = tags,
+                    imagePath = imagePath ?: existingRecipe?.imagePath,
+                    difficulty = difficulty,
                     createdAt = existingRecipe?.createdAt ?: System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 )

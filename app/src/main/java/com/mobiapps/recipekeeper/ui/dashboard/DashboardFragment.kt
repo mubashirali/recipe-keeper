@@ -12,7 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -55,7 +55,7 @@ class DashboardFragment : Fragment() {
                 showDeleteConfirmationDialog(recipe)
             }
         )
-        binding.recyclerRecipes.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerRecipes.adapter = adapter
 
         // Observe filtered recipes
