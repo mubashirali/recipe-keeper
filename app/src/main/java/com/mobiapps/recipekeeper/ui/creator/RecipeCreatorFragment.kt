@@ -11,11 +11,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import com.mobiapps.recipekeeper.R
 import com.mobiapps.recipekeeper.databinding.FragmentRecipeCreatorBinding
 import com.mobiapps.recipekeeper.databinding.ItemIngredientRowBinding
+import com.mobiapps.recipekeeper.domain.model.Recipe
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -24,6 +26,7 @@ class RecipeCreatorFragment : Fragment() {
     private var _binding: FragmentRecipeCreatorBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RecipeCreatorViewModel by viewModels()
+    private val args: RecipeCreatorFragmentArgs by navArgs()
 
     private val ingredientRows = mutableListOf<ItemIngredientRowBinding>()
     
@@ -46,9 +49,22 @@ class RecipeCreatorFragment : Fragment() {
             addIngredientRow()
         }
 
-        // Add one initial row if empty to prompt input
-        if (ingredientRows.isEmpty()) {
-            addIngredientRow()
+        // Check if we're in edit mode
+        args.recipeId?.let { recipeId ->
+            viewModel.loadRecipe(recipeId)
+        } ?: run {
+            // Add one initial row if empty to prompt input for NEW recipe
+            if (ingredientRows.isEmpty()) {
+                addIngredientRow()
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recipeToEdit.collect { recipe ->
+                    recipe?.let { populateFields(it) }
+                }
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -86,13 +102,38 @@ class RecipeCreatorFragment : Fragment() {
         }
     }
 
-    private fun addIngredientRow() {
+    private fun populateFields(recipe: Recipe) {
+        binding.toolbar.title = "Edit Recipe"
+        binding.etTitle.setText(recipe.title)
+        binding.etDescription.setText(recipe.description)
+        binding.etPrepTime.setText(recipe.prepTimeMinutes.toString())
+        binding.etServings.setText(recipe.servings.toString())
+        binding.etInstructions.setText(recipe.instructions.joinToString("\n"))
+        binding.etTags.setText(recipe.tags.joinToString(", "))
+
+        // Clear existing rows and add from recipe
+        binding.containerIngredients.removeAllViews()
+        ingredientRows.clear()
+        recipe.ingredients.forEach { ingredient ->
+            addIngredientRow(ingredient.quantity, ingredient.unit, ingredient.name)
+        }
+        
+        if (ingredientRows.isEmpty()) {
+            addIngredientRow()
+        }
+    }
+
+    private fun addIngredientRow(quantity: String = "", unit: String = "", name: String = "") {
         val rowBinding = ItemIngredientRowBinding.inflate(layoutInflater, binding.containerIngredients, true)
         ingredientRows.add(rowBinding)
         
         // Setup the unit dropdown (Exposed Dropdown Menu)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, units)
         rowBinding.etIngredientUnit.setAdapter(adapter)
+
+        rowBinding.etIngredientQuantity.setText(quantity)
+        rowBinding.etIngredientUnit.setText(unit, false)
+        rowBinding.etIngredientName.setText(name)
 
         rowBinding.btnRemoveIngredient.setOnClickListener {
             binding.containerIngredients.removeView(rowBinding.root)

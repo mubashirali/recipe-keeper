@@ -47,6 +47,10 @@ class DashboardFragment : Fragment() {
                 val action = DashboardFragmentDirections.actionDashboardToViewer(recipe.id)
                 findNavController().navigate(action)
             },
+            onEditClick = { recipe ->
+                val action = DashboardFragmentDirections.actionDashboardToCreator(recipe.id)
+                findNavController().navigate(action)
+            },
             onDeleteClick = { recipe ->
                 showDeleteConfirmationDialog(recipe)
             }

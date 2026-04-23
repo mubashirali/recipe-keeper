@@ -36,6 +36,15 @@
                 android:text="Recipe Title" />
 
             <ImageButton
+                android:id="@+id/ibEditRecipe"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Edit recipe"
+                android:src="@drawable/ic_edit"
+                app:tint="?attr/colorPrimary" />
+
+            <ImageButton
                 android:id="@+id/ibDeleteRecipe"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

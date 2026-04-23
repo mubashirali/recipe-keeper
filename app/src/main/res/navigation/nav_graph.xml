@@ -23,7 +23,13 @@
         android:id="@+id/recipeCreatorFragment"
         android:name="com.mobiapps.recipekeeper.ui.creator.RecipeCreatorFragment"
         android:label="New Recipe"
-        tools:layout="@layout/fragment_recipe_creator" />
+        tools:layout="@layout/fragment_recipe_creator">
+        <argument
+            android:name="recipeId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/recipeViewerFragment"
@@ -33,5 +39,8 @@
         <argument
             android:name="recipeId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_recipeViewerFragment_to_recipeCreatorFragment"
+            app:destination="@id/recipeCreatorFragment" />
     </fragment>
 </navigation>

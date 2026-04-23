@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -28,6 +29,16 @@ class RecipeCreatorViewModel @Inject constructor(
     private val _saveState = MutableStateFlow<SaveState>(SaveState.Idle)
     val saveState: StateFlow<SaveState> = _saveState.asStateFlow()
 
+    private val _recipeToEdit = MutableStateFlow<Recipe?>(null)
+    val recipeToEdit: StateFlow<Recipe?> = _recipeToEdit.asStateFlow()
+
+    fun loadRecipe(recipeId: String) {
+        viewModelScope.launch {
+            val recipe = recipeRepository.getRecipeById(recipeId).firstOrNull()
+            _recipeToEdit.value = recipe
+        }
+    }
+
     fun saveRecipe(
         title: String,
         description: String?,
@@ -40,10 +51,12 @@ class RecipeCreatorViewModel @Inject constructor(
         viewModelScope.launch {
             _saveState.value = SaveState.Saving
             try {
-                val recipeId = UUID.randomUUID().toString()
+                val existingRecipe = _recipeToEdit.value
+                val recipeId = existingRecipe?.id ?: UUID.randomUUID().toString()
+                
                 val recipe = Recipe(
                     id = recipeId,
-                    userId = null,
+                    userId = existingRecipe?.userId,
                     title = title,
                     description = if (description == null) "" else description,
                     prepTimeMinutes = prepTimeMinutes,
@@ -60,7 +73,7 @@ class RecipeCreatorViewModel @Inject constructor(
                     },
                     instructions = instructions,
                     tags = tags,
-                    createdAt = System.currentTimeMillis(),
+                    createdAt = existingRecipe?.createdAt ?: System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 )
                 recipeRepository.saveRecipe(recipe)

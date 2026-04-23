@@ -37,6 +37,17 @@ class RecipeViewerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.inflateMenu(R.menu.menu_viewer)
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_edit -> {
+                    val action = RecipeViewerFragmentDirections.actionRecipeViewerFragmentToRecipeCreatorFragment(args.recipeId)
+                    findNavController().navigate(action)
+                    true
+                }
+                else -> false
+            }
+        }
 
         // Load recipe when args are available
         viewModel.loadRecipe(args.recipeId)
@@ -77,8 +88,8 @@ class RecipeViewerFragment : Fragment() {
         recipe.tags.forEach { tag ->
             val chip = Chip(requireContext()).apply {
                 text = tag
-                isClickable = false
                 isCheckable = false
+                isClickable = false
             }
             binding.chipGroupTags.addView(chip)
         }
