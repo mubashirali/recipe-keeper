@@ -1,6 +1,5 @@
 package com.mobiapps.recipekeeper.ui.dashboard
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mobiapps.recipekeeper.R
+import com.mobiapps.recipekeeper.databinding.DialogConfirmDeleteBinding
 import com.mobiapps.recipekeeper.databinding.FragmentDashboardBinding
 import com.mobiapps.recipekeeper.domain.model.Recipe
-import com.mobiapps.recipekeeper.data.repository.RecipeRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,6 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private val viewModel: DashboardViewModel by viewModels()
-    private val recipeRepository: RecipeRepository by viewModels()
     private lateinit var adapter: RecipeAdapter
 
     override fun onCreateView(
@@ -49,7 +48,6 @@ class DashboardFragment : Fragment() {
                 findNavController().navigate(action)
             },
             onDeleteClick = { recipe ->
-                // Show confirmation dialog before deleting
                 showDeleteConfirmationDialog(recipe)
             }
         )
@@ -99,7 +97,6 @@ class DashboardFragment : Fragment() {
         val context = ContextThemeWrapper(requireContext(), R.style.Widget_RecipeKeeper_TagChip)
         binding.tagChipGroup.removeAllViews()
 
-        // Add "All" chip
         val allChip = Chip(context).apply {
             text = "All Recipes"
             isCheckable = true
@@ -111,7 +108,6 @@ class DashboardFragment : Fragment() {
         }
         binding.tagChipGroup.addView(allChip)
 
-        // Add chips for each tag
         tags.forEach { tag ->
             val chip = Chip(context).apply {
                 text = tag
@@ -127,21 +123,23 @@ class DashboardFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationDialog(recipe: Recipe) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Delete Recipe")
-            .setMessage("Are you sure you want to delete \"${recipe.title}\"? This action cannot be undone.")
-            .setPositiveButton("Delete") { dialog, which ->
-                lifecycleScope.launch {
-                    try {
-                        viewModel.deleteRecipe(recipe)
-                        // Show a toast or snackbar to indicate success
-                    } catch (e: Exception) {
-                        // Show error message
-                    }
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        val dialogBinding = DialogConfirmDeleteBinding.inflate(layoutInflater)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+
+        dialogBinding.tvDialogMessage.text = getString(R.string.delete_recipe_confirmation_message, recipe.title)
+        
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnDelete.setOnClickListener {
+            viewModel.deleteRecipe(recipe)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     override fun onDestroyView() {

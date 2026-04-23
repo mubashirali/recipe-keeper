@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Recipe Keeper</string>
     <string name="delete_recipe">Delete recipe</string>
+    <string name="delete_recipe_confirmation_title">Delete Recipe?</string>
+    <string name="delete_recipe_confirmation_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

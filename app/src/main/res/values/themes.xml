@@ -31,6 +31,7 @@
         <!-- Component styles -->
         <item name="materialCardViewStyle">@style/Widget.RecipeKeeper.CardView</item>
         <item name="chipStyle">@style/Widget.Material3.Chip.Filter</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.RecipeKeeper.MaterialAlertDialog</item>
     </style>
 
     <style name="Widget.RecipeKeeper.CardView" parent="Widget.Material3.CardView.Elevated">
@@ -51,5 +52,20 @@
         <item name="chipCornerRadius">12dp</item>
         <item name="showMotionSpec">@null</item>
         <item name="hideMotionSpec">@null</item>
+    </style>
+
+    <!-- Custom Alert Dialog Theme -->
+    <style name="ThemeOverlay.RecipeKeeper.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.RecipeKeeper</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="MaterialAlertDialog.RecipeKeeper" parent="MaterialAlertDialog.Material3">
+        <item name="shapeAppearance">@style/ShapeAppearance.RecipeKeeper.Dialog</item>
+    </style>
+
+    <style name="ShapeAppearance.RecipeKeeper.Dialog" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">28dp</item>
     </style>
 </resources>
