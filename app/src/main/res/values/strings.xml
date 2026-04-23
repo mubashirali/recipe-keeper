@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Recipe Keeper</string>
+    <string name="delete_recipe">Delete recipe</string>
 </resources>

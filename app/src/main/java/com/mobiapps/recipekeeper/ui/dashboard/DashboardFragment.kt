@@ -1,5 +1,6 @@
 package com.mobiapps.recipekeeper.ui.dashboard
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.mobiapps.recipekeeper.R
 import com.mobiapps.recipekeeper.databinding.FragmentDashboardBinding
+import com.mobiapps.recipekeeper.domain.model.Recipe
+import com.mobiapps.recipekeeper.data.repository.RecipeRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,7 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private val viewModel: DashboardViewModel by viewModels()
+    private val recipeRepository: RecipeRepository by viewModels()
     private lateinit var adapter: RecipeAdapter
 
     override fun onCreateView(
@@ -39,10 +43,16 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Setup RecyclerView
-        adapter = RecipeAdapter { recipe ->
-            val action = DashboardFragmentDirections.actionDashboardToViewer(recipe.id)
-            findNavController().navigate(action)
-        }
+        adapter = RecipeAdapter(
+            onRecipeClick = { recipe ->
+                val action = DashboardFragmentDirections.actionDashboardToViewer(recipe.id)
+                findNavController().navigate(action)
+            },
+            onDeleteClick = { recipe ->
+                // Show confirmation dialog before deleting
+                showDeleteConfirmationDialog(recipe)
+            }
+        )
         binding.recyclerRecipes.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerRecipes.adapter = adapter
 
@@ -114,6 +124,24 @@ class DashboardFragment : Fragment() {
             }
             binding.tagChipGroup.addView(chip)
         }
+    }
+
+    private fun showDeleteConfirmationDialog(recipe: Recipe) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Recipe")
+            .setMessage("Are you sure you want to delete \"${recipe.title}\"? This action cannot be undone.")
+            .setPositiveButton("Delete") { dialog, which ->
+                lifecycleScope.launch {
+                    try {
+                        viewModel.deleteRecipe(recipe)
+                        // Show a toast or snackbar to indicate success
+                    } catch (e: Exception) {
+                        // Show error message
+                    }
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     override fun onDestroyView() {

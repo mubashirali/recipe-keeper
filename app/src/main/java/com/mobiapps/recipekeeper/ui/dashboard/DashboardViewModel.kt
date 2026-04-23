@@ -81,4 +81,10 @@ class DashboardViewModel @Inject constructor(
     fun setSelectedTag(tag: String) {
         _selectedTag.value = tag
     }
+
+    fun deleteRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            recipeRepository.deleteRecipe(recipe)
+        }
+    }
 }
