@@ -13,8 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mobiapps.recipekeeper.R
 import com.mobiapps.recipekeeper.databinding.DialogConfirmDeleteBinding
@@ -30,6 +34,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: DashboardViewModel by viewModels()
     private lateinit var adapter: RecipeAdapter
+    private var nativeAd: NativeAd? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,14 +60,22 @@ class DashboardFragment : Fragment() {
                 showDeleteConfirmationDialog(recipe)
             }
         )
-        binding.recyclerRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerRecipes.layoutManager = GridLayoutManager(requireContext(), 2).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (adapter.getItemViewType(position) == 1) 2 else 1
+                }
+            }
+        }
         binding.recyclerRecipes.adapter = adapter
+
+        loadNativeAd()
 
         // Observe filtered recipes
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.filteredRecipes.collect { recipes ->
-                    adapter.submitList(recipes)
+                    updateListWithAds(recipes)
                     binding.emptyStateContainer.visibility = if (recipes.isEmpty()) View.VISIBLE else View.GONE
                     binding.recyclerRecipes.visibility = if (recipes.isEmpty()) View.GONE else View.VISIBLE
                 }
@@ -73,7 +86,7 @@ class DashboardFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allTags.collect { tags ->
-                    setupTagChips(tags)
+                    updateTagChips(tags)
                 }
             }
         }
@@ -97,7 +110,39 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun setupTagChips(tags: List<String>) {
+    private fun loadNativeAd() {
+        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-4179968443458774/3875615101")
+            .forNativeAd { ad : NativeAd ->
+                nativeAd = ad
+                if (!isDetached) {
+                    updateListWithAds(viewModel.filteredRecipes.value)
+                }
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    // Handle failure
+                }
+            })
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
+
+    private fun updateListWithAds(recipes: List<Recipe>) {
+        val items = mutableListOf<DashboardItem>()
+        recipes.forEachIndexed { index, recipe ->
+            items.add(DashboardItem.RecipeItem(recipe))
+            // Insert ad after every 5 recipes if ad is loaded
+            nativeAd?.let { ad ->
+                if ((index + 1) % 5 == 0) {
+                    items.add(DashboardItem.AdItem(ad))
+                }
+            }
+        }
+        adapter.submitList(items)
+    }
+
+    private fun updateTagChips(tags: List<String>) {
         val context = ContextThemeWrapper(requireContext(), R.style.Widget_RecipeKeeper_TagChip)
         binding.tagChipGroup.removeAllViews()
 
@@ -148,6 +193,7 @@ class DashboardFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        nativeAd?.destroy()
         _binding = null
     }
 }

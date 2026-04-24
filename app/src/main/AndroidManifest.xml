@@ -21,6 +21,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Google AdMob App ID (Test ID) -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4179968443458774~1603224887"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

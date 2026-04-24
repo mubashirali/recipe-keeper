@@ -77,6 +77,9 @@ dependencies {
     // Image loading
     implementation(libs.coil)
 
+    // AdMob
+    implementation(libs.play.services.ads)
+
     // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
