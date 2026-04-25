@@ -7,15 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mobiapps.recipekeeper"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    namespace = "com.mobiapps.recipekeep"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.mobiapps.recipekeeper"
+        applicationId = "com.mobiapps.recipekeep"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -23,8 +19,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            // Replace with your actual keystore information
+            storeFile = file("/Users/m.ali.31/AndroidStudioProjects/RecipeKeeper/1recipeKeeper2026.jks")
+            storePassword = "1recipeKeeper2026"
+            keyAlias = "key0"
+            keyPassword = "1recipeKeeper2026"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -79,6 +86,8 @@ dependencies {
 
     // AdMob
     implementation(libs.play.services.ads)
+    implementation(libs.play.integrity)
+    implementation(libs.user.messaging.platform)
 
     // Unit tests
     testImplementation(libs.junit)
