@@ -42,6 +42,7 @@ class RecipeDaoTest {
             id = "r1", userId = null, title = "Pasta", description = "Simple",
             prepTimeMinutes = 20, servings = 2,
             instructions = emptyList(), tags = emptyList(),
+            imagePath = null, difficulty = "Easy",
             createdAt = 1000L, updatedAt = 1000L
         )
         val ingredients = listOf(
