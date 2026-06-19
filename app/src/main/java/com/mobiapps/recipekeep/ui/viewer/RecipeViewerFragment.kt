@@ -16,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.chip.Chip
 import com.mobiapps.recipekeep.R
 import com.mobiapps.recipekeep.databinding.FragmentRecipeViewerBinding
@@ -81,6 +83,20 @@ class RecipeViewerFragment : Fragment() {
                 updateServingsAndIngredients()
             }
         }
+
+        MobileAds.initialize(requireContext()) {
+            if (_binding != null) binding.adView.loadAd(AdRequest.Builder().build())
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        _binding?.adView?.resume()
+    }
+
+    override fun onPause() {
+        _binding?.adView?.pause()
+        super.onPause()
     }
 
     private fun updateServingsAndIngredients() {
@@ -197,6 +213,7 @@ class RecipeViewerFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        _binding?.adView?.destroy()
         super.onDestroyView()
         _binding = null
     }

@@ -120,7 +120,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="8dp"
-        android:paddingBottom="88dp"
+        android:paddingBottom="144dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
@@ -155,12 +155,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="66dp"
+        android:layout_marginEnd="16dp"
         android:text="New Recipe"
         app:icon="@android:drawable/ic_input_add"
         app:cornerRadius="16dp"
         android:textColor="?attr/colorOnPrimary"
         app:iconTint="?attr/colorOnPrimary"
         app:backgroundTint="?attr/colorPrimary" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-4179968443458774/3258172005" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

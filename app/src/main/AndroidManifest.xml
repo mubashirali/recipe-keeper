@@ -28,7 +28,6 @@
             android:name="com.google.android.play.billing.DELAY_INITIAL_INTEGRITY_CHECK"
             android:value="true" />
 
-        <!-- Google AdMob App ID (Test ID) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4179968443458774~1603224887"/>
