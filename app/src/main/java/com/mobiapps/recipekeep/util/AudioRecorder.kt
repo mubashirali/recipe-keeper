@@ -38,8 +38,7 @@ class AudioRecorder(context: Context) {
 
     fun start(): Result<Unit> = runCatching {
         check(_state.value == RecState.Idle) { "Already recording" }
-        val dir = appContext.getExternalFilesDir(null) ?: appContext.filesDir
-        val out = File(dir, "recipe_audio_${UUID.randomUUID()}.m4a")
+        val out = File(AudioFiles.dir(appContext), "recipe_audio_${UUID.randomUUID()}.m4a")
         @Suppress("DEPRECATION")
         val r = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaRecorder(appContext) else MediaRecorder()
         try {
