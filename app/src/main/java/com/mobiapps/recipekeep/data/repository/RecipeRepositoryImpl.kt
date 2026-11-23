@@ -9,6 +9,7 @@ import com.mobiapps.recipekeep.domain.model.Ingredient
 import com.mobiapps.recipekeep.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.File
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -30,6 +31,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRecipe(recipe: Recipe) {
         recipeDao.deleteRecipe(recipe.toEntity())
+        recipe.audioPaths.forEach { File(it).delete() }
     }
 }
 
