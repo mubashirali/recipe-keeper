@@ -53,10 +53,16 @@ class AudioRecorder(context: Context) {
             r.setOutputFile(out.absolutePath)
             r.setOnInfoListener { mr, what, _ ->
                 if (mr === recorder && what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    onSystemStop?.invoke(stop())
+                    val res = stop()
+                    onSystemStop?.invoke(res)
                 }
             }
-            r.setOnErrorListener { mr, _, _ -> if (mr === recorder) onSystemStop?.invoke(stop()) }
+            r.setOnErrorListener { mr, _, _ ->
+                if (mr === recorder) {
+                    val res = stop()
+                    onSystemStop?.invoke(res)
+                }
+            }
             r.prepare()
             r.start()
         } catch (e: Exception) {
