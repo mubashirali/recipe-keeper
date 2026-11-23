@@ -48,7 +48,8 @@ private fun RecipeWithIngredients.toDomain() = Recipe(
     difficulty = recipe.difficulty,
     ingredients = ingredients.map(IngredientEntity::toDomain),
     createdAt = recipe.createdAt,
-    updatedAt = recipe.updatedAt
+    updatedAt = recipe.updatedAt,
+    audioPaths = recipe.audioPaths
 )
 
 private fun IngredientEntity.toDomain() = Ingredient(
@@ -63,7 +64,8 @@ private fun Recipe.toEntity() = RecipeEntity(
     tags = tags,                   // List<String>; Room invokes Converters.kt
     imagePath = imagePath,
     difficulty = difficulty,
-    createdAt = createdAt, updatedAt = updatedAt
+    createdAt = createdAt, updatedAt = updatedAt,
+    audioPaths = audioPaths
 )
 
 private fun Ingredient.toEntity() = IngredientEntity(

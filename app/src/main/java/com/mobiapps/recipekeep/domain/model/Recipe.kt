@@ -13,5 +13,6 @@ data class Recipe(
     val imagePath: String? = null,
     val difficulty: String = "Medium", // Easy, Medium, Hard
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val audioPaths: List<String> = emptyList()
 )

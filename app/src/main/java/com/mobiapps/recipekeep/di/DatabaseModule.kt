@@ -20,7 +20,7 @@ object DatabaseModule {
     @Singleton
     fun provideRecipeDatabase(@ApplicationContext context: Context): RecipeDatabase =
         Room.databaseBuilder(context, RecipeDatabase::class.java, "recipe_keeper_db")
-            .addMigrations(RecipeDatabase.MIGRATION_1_2)
+            .addMigrations(RecipeDatabase.MIGRATION_1_2, RecipeDatabase.MIGRATION_2_3)
             .fallbackToDestructiveMigration()
             .build()
 
