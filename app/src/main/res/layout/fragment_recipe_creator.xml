@@ -68,6 +68,86 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 style="@style/Widget.RecipeKeeper.CardView"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Voice notes"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Optional. Say the recipe in your own language."
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_record"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Record"
+                            app:icon="@android:drawable/ic_btn_speak_now" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_pause_resume"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pause"
+                            android:visibility="gone" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_stop"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Stop"
+                            android:visibility="gone" />
+
+                        <Chronometer
+                            android:id="@+id/chronometer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:textAppearance="?attr/textAppearanceTitleMedium"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_clips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.RecipeKeeper.CardView"
                 app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:strokeWidth="0dp">
 
@@ -91,7 +171,7 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Recipe Title *"
+                        android:hint="Recipe Title"
                         android:layout_marginBottom="16dp"
                         app:startIconDrawable="@drawable/ic_edit">
                         <com.google.android.material.textfield.TextInputEditText
@@ -127,7 +207,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Prep (min) *"
+                            android:hint="Prep (min)"
                             android:layout_marginEnd="8dp">
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_prep_time"
@@ -142,7 +222,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Servings *">
+                        android:hint="Servings">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_servings"
                             android:layout_width="match_parent"

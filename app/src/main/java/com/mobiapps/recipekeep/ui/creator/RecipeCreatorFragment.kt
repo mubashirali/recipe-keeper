@@ -1,14 +1,19 @@
 package com.mobiapps.recipekeep.ui.creator
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -23,7 +28,12 @@ import com.mobiapps.recipekeep.R
 import com.mobiapps.recipekeep.databinding.FragmentRecipeCreatorBinding
 import com.mobiapps.recipekeep.databinding.ItemIngredientRowBinding
 import com.mobiapps.recipekeep.domain.model.Recipe
+import com.mobiapps.recipekeep.ui.common.AudioClipList
+import com.mobiapps.recipekeep.util.AudioPlayer
 import com.mobiapps.recipekeep.util.ImageUtils
+import com.mobiapps.recipekeep.util.RecState
+import com.mobiapps.recipekeep.util.RecipeDraftRules
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -42,6 +52,14 @@ class RecipeCreatorFragment : Fragment() {
     
     private var currentPhotoPath: String? = null
     private var selectedImagePath: String? = null
+
+    private val player = AudioPlayer()
+
+    private val micPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) viewModel.startRecording()
+            else Snackbar.make(binding.root, "Microphone permission is needed to record", Snackbar.LENGTH_LONG).show()
+        }
 
     private val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
@@ -90,6 +108,49 @@ class RecipeCreatorFragment : Fragment() {
 
         binding.btnAddIngredient.setOnClickListener {
             addIngredientRow()
+        }
+
+        val clipList = AudioClipList(
+            container = binding.containerClips,
+            player = player,
+            onDelete = { player.stopIf(it); viewModel.removeClip(it) },
+            onMissing = { Snackbar.make(binding.root, "Recording not found", Snackbar.LENGTH_SHORT).show() }
+        )
+
+        binding.btnRecord.setOnClickListener {
+            val granted = ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+            if (granted) viewModel.startRecording() else micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+        binding.btnPauseResume.setOnClickListener {
+            if (viewModel.recState.value == RecState.Recording) viewModel.pauseRecording() else viewModel.resumeRecording()
+        }
+        binding.btnStop.setOnClickListener { viewModel.stopRecording() }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.recState.collect { state ->
+                        val active = state != RecState.Idle
+                        binding.btnRecord.isVisible = !active
+                        binding.btnPauseResume.isVisible = active
+                        binding.btnStop.isVisible = active
+                        binding.chronometer.isVisible = active
+                        binding.btnPauseResume.text = if (state == RecState.Paused) "Resume" else "Pause"
+                        binding.chronometer.base = SystemClock.elapsedRealtime() - viewModel.elapsedMs()
+                        if (state == RecState.Recording) binding.chronometer.start() else binding.chronometer.stop()
+                        if (state == RecState.Recording) player.stop()
+                    }
+                }
+                launch {
+                    combine(viewModel.clips, player.playing) { clips, playing -> clips to playing }
+                        .collect { (clips, playing) -> clipList.render(clips, playing) }
+                }
+                launch {
+                    viewModel.messages.collect { Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show() }
+                }
+            }
         }
 
         // Check if we're in edit mode
@@ -149,8 +210,8 @@ class RecipeCreatorFragment : Fragment() {
         binding.toolbar.title = "Edit Recipe"
         binding.etTitle.setText(recipe.title)
         binding.etDescription.setText(recipe.description)
-        binding.etPrepTime.setText(recipe.prepTimeMinutes.toString())
-        binding.etServings.setText(recipe.servings.toString())
+        binding.etPrepTime.setText(recipe.prepTimeMinutes.takeIf { it > 0 }?.toString().orEmpty())
+        binding.etServings.setText(recipe.servings.takeIf { it > 0 }?.toString().orEmpty())
         binding.etInstructions.setText(recipe.instructions.joinToString("\n"))
         binding.etTags.setText(recipe.tags.joinToString(", "))
 
@@ -237,34 +298,12 @@ class RecipeCreatorFragment : Fragment() {
     }
 
     private fun saveRecipe() {
-        val title = binding.etTitle.text?.toString() ?: ""
-
-        if (title.isBlank()) {
-            binding.tilTitle.error = "Title is required"
-            binding.etTitle.requestFocus()
-            return
-        }
-        binding.tilTitle.error = null
-
-        val prepTimeText = binding.etPrepTime.text?.toString() ?: ""
-        if (prepTimeText.isBlank()) {
-            binding.tilPrepTime.error = "Required"
-            binding.etPrepTime.requestFocus()
-            return
-        }
-        binding.tilPrepTime.error = null
-
-        val servingsText = binding.etServings.text?.toString() ?: ""
-        if (servingsText.isBlank()) {
-            binding.tilServings.error = "Required"
-            binding.etServings.requestFocus()
-            return
-        }
-        binding.tilServings.error = null
-
-        val description = binding.etDescription.text?.toString()
-        val prepTime = prepTimeText.toIntOrNull() ?: 0
-        val servings = servingsText.toIntOrNull() ?: 1
+        val title = binding.etTitle.text?.toString().orEmpty()
+        val description = binding.etDescription.text?.toString().orEmpty()
+        val prepTime = binding.etPrepTime.text?.toString()?.toIntOrNull() ?: 0   // 0 = not set
+        val servings = binding.etServings.text?.toString()?.toIntOrNull() ?: 0   // 0 = not set
+        val instructionsText = binding.etInstructions.text?.toString().orEmpty()
+        val tagsText = binding.etTags.text?.toString().orEmpty()
 
         val ingredients = mutableListOf<Pair<String, Pair<String, String>>>()
         for (rowBinding in ingredientRows) {
@@ -276,12 +315,20 @@ class RecipeCreatorFragment : Fragment() {
             }
         }
 
-        val instructionsText = binding.etInstructions.text?.toString() ?: ""
+        val hasAudio = viewModel.clips.value.isNotEmpty()
+        val hasImage = selectedImagePath != null || viewModel.recipeToEdit.value?.imagePath != null
+        val hasContent = RecipeDraftRules.hasContent(
+            textFields = listOf(title, description, instructionsText, tagsText) + ingredients.map { it.second.second },
+            hasImage = hasImage,
+            hasAudio = hasAudio
+        )
+        if (!hasContent) {
+            Snackbar.make(binding.root, "Add something first: text, a photo, or a voice note", Snackbar.LENGTH_LONG).show()
+            return
+        }
+
         val instructions = instructionsText.split('\n').filter { it.isNotBlank() }
-
-        val tagsText = binding.etTags.text?.toString() ?: ""
         val tags = tagsText.split(',').map { it.trim() }.filter { it.isNotBlank() }
-
         val difficulty = when (binding.cgDifficulty.checkedChipId) {
             R.id.chip_easy -> "Easy"
             R.id.chip_hard -> "Hard"
@@ -289,8 +336,8 @@ class RecipeCreatorFragment : Fragment() {
         }
 
         viewModel.saveRecipe(
-            title = title,
-            description = if (description.isNullOrEmpty()) null else description,
+            title = RecipeDraftRules.resolveTitle(title, hasAudio, System.currentTimeMillis()),
+            description = description.ifEmpty { null },
             prepTimeMinutes = prepTime,
             servings = servings,
             ingredients = ingredients,
@@ -301,8 +348,17 @@ class RecipeCreatorFragment : Fragment() {
         )
     }
 
+    override fun onStop() {
+        super.onStop()
+        player.stop()
+        if (!requireActivity().isChangingConfigurations && viewModel.recState.value != RecState.Idle) {
+            viewModel.stopRecording() // keep what was recorded so far
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        player.stop()
         _binding = null
     }
 }
