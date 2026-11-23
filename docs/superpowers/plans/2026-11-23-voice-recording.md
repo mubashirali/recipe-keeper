@@ -584,9 +584,11 @@ class RecipeCreatorViewModel @Inject constructor(
     private var saved = false
 
     init {
-        recorder.onAutoStop = { file ->
-            addClip(file)
-            _messages.tryEmit("Reached the 10 minute limit. Clip saved.")
+        // Max-duration cap or a MediaRecorder error stopped the take by itself.
+        recorder.onSystemStop = { result ->
+            result
+                .onSuccess { addClip(it); _messages.tryEmit("Recording stopped. Clip saved.") }
+                .onFailure { _messages.tryEmit("Recording stopped unexpectedly and couldn't be saved") }
         }
     }
 
@@ -1185,6 +1187,7 @@ Open the app. **Both Task 0 recipes must still be there**, photo included. If th
 
 - [ ] **Step 3: Manual device pass** (record the result of each):
   - Record → Pause → Resume → Stop. A clip row appears. Play, pause, and resume playback work.
+  - Cap check: temporarily set `MAX_DURATION_MS` to 10_000 in `AudioRecorder`, record past 10 s and confirm it auto-stops with a clip; repeat with a pause in the middle (does paused time count toward the cap?). Restore the constant to `10 * 60 * 1000`.
   - Record a second clip. Two rows. Delete one. One row.
   - Rotate during recording. Timer and state are kept, recording continues.
   - Press Home during recording. On return a clip exists and the state is Idle.
