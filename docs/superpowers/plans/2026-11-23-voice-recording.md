@@ -849,7 +849,7 @@ import kotlinx.coroutines.flow.combine
         val clipList = AudioClipList(
             container = binding.containerClips,
             player = player,
-            onDelete = { viewModel.removeClip(it) },
+            onDelete = { player.stopIf(it); viewModel.removeClip(it) },
             onMissing = { Snackbar.make(binding.root, "Recording not found", Snackbar.LENGTH_SHORT).show() }
         )
 
