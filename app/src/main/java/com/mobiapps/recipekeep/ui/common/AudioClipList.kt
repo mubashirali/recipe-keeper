@@ -11,6 +11,7 @@ class AudioClipList(
     private val container: LinearLayout,
     private val player: AudioPlayer,
     private val onDelete: ((String) -> Unit)? = null,
+    private val canPlay: () -> Boolean = { true },
     private val onMissing: () -> Unit
 ) {
     fun render(paths: List<String>, playing: String?) {
@@ -26,7 +27,10 @@ class AudioClipList(
             row.btnPlay.contentDescription =
                 if (path == playing) "Pause voice note $n" else "Play voice note $n"
             row.btnDeleteClip.contentDescription = "Delete voice note $n"
-            row.btnPlay.setOnClickListener { if (!player.toggle(path)) onMissing() }
+            row.btnPlay.setOnClickListener {
+                if (!canPlay()) return@setOnClickListener
+                if (!player.toggle(path)) onMissing()
+            }
             row.btnDeleteClip.isVisible = onDelete != null
             row.btnDeleteClip.setOnClickListener { onDelete?.invoke(path) }
         }

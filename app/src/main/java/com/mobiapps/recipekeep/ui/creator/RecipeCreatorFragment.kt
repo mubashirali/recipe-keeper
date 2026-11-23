@@ -114,6 +114,7 @@ class RecipeCreatorFragment : Fragment() {
             container = binding.containerClips,
             player = player,
             onDelete = { player.stopIf(it); viewModel.removeClip(it) },
+            canPlay = { viewModel.recState.value != RecState.Recording },
             onMissing = { Snackbar.make(binding.root, "Recording not found", Snackbar.LENGTH_SHORT).show() }
         )
 
@@ -298,6 +299,7 @@ class RecipeCreatorFragment : Fragment() {
     }
 
     private fun saveRecipe() {
+        if (viewModel.recState.value != RecState.Idle) viewModel.stopRecording() // finalise in-progress take (synchronous)
         val title = binding.etTitle.text?.toString().orEmpty()
         val description = binding.etDescription.text?.toString().orEmpty()
         val prepTime = binding.etPrepTime.text?.toString()?.toIntOrNull() ?: 0   // 0 = not set
@@ -337,7 +339,7 @@ class RecipeCreatorFragment : Fragment() {
 
         viewModel.saveRecipe(
             title = RecipeDraftRules.resolveTitle(title, hasAudio, System.currentTimeMillis()),
-            description = description.ifEmpty { null },
+            description = description.ifBlank { null },
             prepTimeMinutes = prepTime,
             servings = servings,
             ingredients = ingredients,

@@ -122,6 +122,7 @@ class RecipeCreatorViewModel @Inject constructor(
         imagePath: String? = null,
         difficulty: String = "Medium"
     ) {
+        if (saving) return
         viewModelScope.launch {
             _saveState.value = SaveState.Saving
             saved = false
