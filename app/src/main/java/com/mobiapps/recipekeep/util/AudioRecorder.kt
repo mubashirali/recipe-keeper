@@ -12,7 +12,10 @@ import java.util.UUID
 
 enum class RecState { Idle, Recording, Paused }
 
-/** One recording at a time. Each start()..stop() produces one .m4a clip. */
+/**
+ * One recording at a time. Each start()..stop() produces one .m4a clip.
+ * Main-thread only (MediaRecorder callbacks arrive on the thread that created it).
+ */
 class AudioRecorder(context: Context) {
 
     private val appContext = context.applicationContext
@@ -24,15 +27,19 @@ class AudioRecorder(context: Context) {
     private val _state = MutableStateFlow(RecState.Idle)
     val state: StateFlow<RecState> = _state.asStateFlow()
 
-    /** Called when the max-duration cap stops the recording. The clip is already finalised. */
-    var onAutoStop: ((File) -> Unit)? = null
+    /**
+     * Called when the recorder stopped by itself — max-duration cap or a MediaRecorder error.
+     * Carries the stop() result so failures are not swallowed.
+     */
+    var onSystemStop: ((Result<File>) -> Unit)? = null
 
     fun elapsedMs(): Long =
         accumulatedMs + if (_state.value == RecState.Recording) SystemClock.elapsedRealtime() - segmentStart else 0L
 
     fun start(): Result<Unit> = runCatching {
         check(_state.value == RecState.Idle) { "Already recording" }
-        val out = File(appContext.getExternalFilesDir(null), "recipe_audio_${UUID.randomUUID()}.m4a")
+        val dir = appContext.getExternalFilesDir(null) ?: appContext.filesDir
+        val out = File(dir, "recipe_audio_${UUID.randomUUID()}.m4a")
         @Suppress("DEPRECATION")
         val r = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaRecorder(appContext) else MediaRecorder()
         try {
@@ -44,11 +51,12 @@ class AudioRecorder(context: Context) {
             r.setAudioEncodingBitRate(64_000) // ponytail: ~0.5 MB/min, fine for speech
             r.setMaxDuration(MAX_DURATION_MS)
             r.setOutputFile(out.absolutePath)
-            r.setOnInfoListener { _, what, _ ->
-                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    stop().onSuccess { onAutoStop?.invoke(it) }
+            r.setOnInfoListener { mr, what, _ ->
+                if (mr === recorder && what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    onSystemStop?.invoke(stop())
                 }
             }
+            r.setOnErrorListener { mr, _, _ -> if (mr === recorder) onSystemStop?.invoke(stop()) }
             r.prepare()
             r.start()
         } catch (e: Exception) {
@@ -85,6 +93,7 @@ class AudioRecorder(context: Context) {
         val f = checkNotNull(file)
         recorder = null
         file = null
+        accumulatedMs = 0L
         _state.value = RecState.Idle
         val result = runCatching { r.stop(); f }
         runCatching { r.release() }
