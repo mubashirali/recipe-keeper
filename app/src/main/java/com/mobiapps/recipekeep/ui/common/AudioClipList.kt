@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import com.mobiapps.recipekeep.databinding.ItemAudioClipBinding
 import com.mobiapps.recipekeep.util.AudioPlayer
 
-/** Renders one row per clip into [container]. Pass [onDelete] to show delete buttons (creator only). */
+/** Renders one row per clip into [container] (must be a vertical LinearLayout). Pass [onDelete] to show delete buttons (creator only). */
 class AudioClipList(
     private val container: LinearLayout,
     private val player: AudioPlayer,
@@ -22,6 +22,10 @@ class AudioClipList(
             row.btnPlay.setIconResource(
                 if (path == playing) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
             )
+            val n = index + 1
+            row.btnPlay.contentDescription =
+                if (path == playing) "Pause voice note $n" else "Play voice note $n"
+            row.btnDeleteClip.contentDescription = "Delete voice note $n"
             row.btnPlay.setOnClickListener { if (!player.toggle(path)) onMissing() }
             row.btnDeleteClip.isVisible = onDelete != null
             row.btnDeleteClip.setOnClickListener { onDelete?.invoke(path) }

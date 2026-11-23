@@ -1,12 +1,13 @@
 package com.mobiapps.recipekeep.util
 
 import android.media.MediaPlayer
+import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
 
-/** Plays one clip at a time. toggle() = play / pause; a different path switches clip. */
+/** Plays one clip at a time. toggle() = play / pause; a different path switches clip. Main-thread only. */
 class AudioPlayer {
 
     private var player: MediaPlayer? = null
@@ -20,10 +21,15 @@ class AudioPlayer {
     fun toggle(path: String): Boolean {
         val current = player
         if (current != null && loadedPath == path) {
-            return runCatching {
+            return try {
                 if (current.isPlaying) { current.pause(); _playing.value = null }
                 else { current.start(); _playing.value = path }
-            }.isSuccess
+                true
+            } catch (e: Exception) {
+                Log.w("AudioPlayer", "pause/start failed for $path", e)
+                stop()
+                false
+            }
         }
         stop()
         if (!File(path).exists()) return false
@@ -38,10 +44,14 @@ class AudioPlayer {
             _playing.value = path
             true
         } catch (e: Exception) {
+            Log.w("AudioPlayer", "could not play $path", e)
             runCatching { mp.release() }
             false
         }
     }
+
+    /** Stops playback if [path] is the loaded clip (playing or paused). */
+    fun stopIf(path: String) { if (loadedPath == path) stop() }
 
     fun stop() {
         player?.let { runCatching { it.release() } }

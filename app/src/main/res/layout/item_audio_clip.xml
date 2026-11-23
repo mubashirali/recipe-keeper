@@ -10,9 +10,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_play"
         style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:contentDescription="Play or pause voice note"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:icon="@android:drawable/ic_media_play" />
 
     <TextView
@@ -26,9 +25,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_delete_clip"
         style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:contentDescription="Delete voice note"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:visibility="gone"
         app:icon="@android:drawable/ic_delete" />
 </LinearLayout>
