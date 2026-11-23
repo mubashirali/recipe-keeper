@@ -2,6 +2,7 @@ package com.mobiapps.recipekeep.ui.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -40,8 +41,9 @@ class RecipeAdapter(
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.title
             binding.tvRecipeDescription.text = recipe.description.ifBlank { "No description" }
-            binding.tvPrepTime.text = "${recipe.prepTimeMinutes} min"
-            binding.tvServings.text = recipe.servings.toString()
+            binding.rowStats.isVisible = recipe.prepTimeMinutes > 0 || recipe.servings > 0
+            binding.tvPrepTime.text = if (recipe.prepTimeMinutes > 0) "${recipe.prepTimeMinutes} min" else "—"
+            binding.tvServings.text = if (recipe.servings > 0) recipe.servings.toString() else "—"
             binding.tvDifficulty.text = recipe.difficulty
 
             binding.ivRecipeImage.load(recipe.imagePath) {

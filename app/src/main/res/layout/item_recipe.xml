@@ -106,6 +106,7 @@
                 android:text="A brief description of the recipe goes here." />
 
             <LinearLayout
+                android:id="@+id/row_stats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
