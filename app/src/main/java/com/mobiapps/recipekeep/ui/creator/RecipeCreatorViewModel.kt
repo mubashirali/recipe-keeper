@@ -56,6 +56,8 @@ class RecipeCreatorViewModel @Inject constructor(
     private val newClips = mutableSetOf<String>()          // recorded this session, not yet saved
     private val removedSavedClips = mutableSetOf<String>() // saved clips the user deleted; files go after save
     private var saved = false
+    private var saving = false
+    private var clipsSeeded = false
 
     init {
         // Max-duration cap or a MediaRecorder error stopped the take by itself.
@@ -70,7 +72,11 @@ class RecipeCreatorViewModel @Inject constructor(
         viewModelScope.launch {
             val recipe = recipeRepository.getRecipeById(recipeId).firstOrNull()
             // Only seed clips on first load, so rotation doesn't drop clips recorded this session.
-            if (_recipeToEdit.value == null) _clips.value = recipe?.audioPaths.orEmpty()
+            if (!clipsSeeded) {
+                clipsSeeded = true
+                val savedClips = recipe?.audioPaths.orEmpty()
+                _clips.update { savedClips + it.filter { p -> p in newClips } }
+            }
             _recipeToEdit.value = recipe
         }
     }
@@ -88,12 +94,14 @@ class RecipeCreatorViewModel @Inject constructor(
     }
 
     fun stopRecording() {
+        if (recorder.state.value == RecState.Idle) return
         recorder.stop()
             .onSuccess { addClip(it) }
             .onFailure { _messages.tryEmit("Recording was too short or failed") }
     }
 
     fun removeClip(path: String) {
+        if (path !in _clips.value) return
         _clips.update { it - path }
         if (newClips.remove(path)) File(path).delete() else removedSavedClips += path
     }
@@ -116,6 +124,10 @@ class RecipeCreatorViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             _saveState.value = SaveState.Saving
+            saved = false
+            saving = true
+            val clipsSnap = _clips.value
+            val toDelete = removedSavedClips.toSet()
             try {
                 val existingRecipe = _recipeToEdit.value
                 val recipeId = existingRecipe?.id ?: UUID.randomUUID().toString()
@@ -143,15 +155,17 @@ class RecipeCreatorViewModel @Inject constructor(
                     difficulty = difficulty,
                     createdAt = existingRecipe?.createdAt ?: System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis(),
-                    audioPaths = _clips.value
+                    audioPaths = clipsSnap
                 )
                 recipeRepository.saveRecipe(recipe)
-                removedSavedClips.forEach { File(it).delete() }
-                removedSavedClips.clear()
-                newClips.clear()
+                toDelete.forEach { File(it).delete() }
+                removedSavedClips -= toDelete
+                newClips.removeAll(clipsSnap.toSet())
                 saved = true
+                saving = false
                 _saveState.value = SaveState.Success
             } catch (e: Exception) {
+                saving = false
                 e.printStackTrace()
                 _saveState.value = SaveState.Error(e.message ?: "Unknown error")
             }
@@ -164,6 +178,6 @@ class RecipeCreatorViewModel @Inject constructor(
 
     override fun onCleared() {
         recorder.cancel() // in-progress recording is discarded
-        if (!saved) newClips.forEach { File(it).delete() }
+        if (!saved && !saving) newClips.forEach { File(it).delete() }
     }
 }
