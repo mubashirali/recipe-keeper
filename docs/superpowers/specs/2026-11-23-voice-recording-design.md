@@ -67,6 +67,11 @@ ALTER TABLE recipes ADD COLUMN audioPaths TEXT NOT NULL DEFAULT '[]'
 - New clips not saved (user leaves without saving, or deletes a clip before saving) are deleted.
 - Clips of a deleted recipe are deleted in `RecipeRepositoryImpl.deleteRecipe`. Clips removed from a recipe during edit are deleted after a successful save.
 
+**Privacy and cleanup (added after final review)**
+- Clips are written to `<externalFilesDir>/audio/` (`AudioFiles.dir`). The `audio` folder is excluded from **cloud backup** in `backup_rules.xml` and `data_extraction_rules.xml`, so voice notes never leave the device through Auto Backup and cannot push the app past the 25 MB backup cap. Photos and the database are still backed up. Device-to-device transfer is unchanged.
+- Known consequence: after a cloud restore the recipe rows still list their clips, but the files are gone. Playback shows "Recording not found". The viewer has no delete button for clips, so dead rows stay until the recipe is edited and the clip is removed.
+- Orphan sweep: at app start, `AudioFiles.sweepOrphans` deletes `recipe_audio_*.m4a` files in that folder that no recipe references and that are older than 24 h. This cleans up clips left behind when the process was killed after recording but before saving. The 24 h grace period protects a clip that was just recorded.
+
 ## Error handling
 
 - `MediaRecorder` throws on `prepare/start/stop` (mic busy, permission revoked, stop too quickly → `RuntimeException`). Catch, delete the partial file, return to `Idle`, show a snackbar. Never crash.
