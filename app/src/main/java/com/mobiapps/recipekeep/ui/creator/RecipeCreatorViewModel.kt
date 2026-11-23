@@ -1,16 +1,25 @@
 package com.mobiapps.recipekeep.ui.creator
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobiapps.recipekeep.data.repository.RecipeRepository
 import com.mobiapps.recipekeep.domain.model.Ingredient
 import com.mobiapps.recipekeep.domain.model.Recipe
+import com.mobiapps.recipekeep.util.AudioRecorder
+import com.mobiapps.recipekeep.util.RecState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.UUID
 import javax.inject.Inject
 
@@ -23,7 +32,8 @@ sealed class SaveState {
 
 @HiltViewModel
 class RecipeCreatorViewModel @Inject constructor(
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    @ApplicationContext context: Context
 ) : ViewModel() {
 
     private val _saveState = MutableStateFlow<SaveState>(SaveState.Idle)
@@ -32,11 +42,65 @@ class RecipeCreatorViewModel @Inject constructor(
     private val _recipeToEdit = MutableStateFlow<Recipe?>(null)
     val recipeToEdit: StateFlow<Recipe?> = _recipeToEdit.asStateFlow()
 
+    // --- Voice notes ---
+    private val recorder = AudioRecorder(context)
+    val recState: StateFlow<RecState> = recorder.state
+    fun elapsedMs(): Long = recorder.elapsedMs()
+
+    private val _clips = MutableStateFlow<List<String>>(emptyList())
+    val clips: StateFlow<List<String>> = _clips.asStateFlow()
+
+    private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 4)
+    val messages: SharedFlow<String> = _messages.asSharedFlow()
+
+    private val newClips = mutableSetOf<String>()          // recorded this session, not yet saved
+    private val removedSavedClips = mutableSetOf<String>() // saved clips the user deleted; files go after save
+    private var saved = false
+
+    init {
+        // Max-duration cap or a MediaRecorder error stopped the take by itself.
+        recorder.onSystemStop = { result ->
+            result
+                .onSuccess { addClip(it); _messages.tryEmit("Recording stopped. Clip saved.") }
+                .onFailure { _messages.tryEmit("Recording stopped unexpectedly and couldn't be saved") }
+        }
+    }
+
     fun loadRecipe(recipeId: String) {
         viewModelScope.launch {
             val recipe = recipeRepository.getRecipeById(recipeId).firstOrNull()
+            // Only seed clips on first load, so rotation doesn't drop clips recorded this session.
+            if (_recipeToEdit.value == null) _clips.value = recipe?.audioPaths.orEmpty()
             _recipeToEdit.value = recipe
         }
+    }
+
+    fun startRecording() {
+        recorder.start().onFailure { _messages.tryEmit("Couldn't start recording. Is the microphone in use?") }
+    }
+
+    fun pauseRecording() {
+        recorder.pause().onFailure { recorder.cancel(); _messages.tryEmit("Recording failed") }
+    }
+
+    fun resumeRecording() {
+        recorder.resume().onFailure { recorder.cancel(); _messages.tryEmit("Recording failed") }
+    }
+
+    fun stopRecording() {
+        recorder.stop()
+            .onSuccess { addClip(it) }
+            .onFailure { _messages.tryEmit("Recording was too short or failed") }
+    }
+
+    fun removeClip(path: String) {
+        _clips.update { it - path }
+        if (newClips.remove(path)) File(path).delete() else removedSavedClips += path
+    }
+
+    private fun addClip(file: File) {
+        newClips += file.absolutePath
+        _clips.update { it + file.absolutePath }
     }
 
     fun saveRecipe(
@@ -55,12 +119,12 @@ class RecipeCreatorViewModel @Inject constructor(
             try {
                 val existingRecipe = _recipeToEdit.value
                 val recipeId = existingRecipe?.id ?: UUID.randomUUID().toString()
-                
+
                 val recipe = Recipe(
                     id = recipeId,
                     userId = existingRecipe?.userId,
                     title = title,
-                    description = if (description == null) "" else description,
+                    description = description ?: "",
                     prepTimeMinutes = prepTimeMinutes,
                     servings = servings,
                     ingredients = ingredients.map { (quantity, unitName) ->
@@ -78,9 +142,14 @@ class RecipeCreatorViewModel @Inject constructor(
                     imagePath = imagePath ?: existingRecipe?.imagePath,
                     difficulty = difficulty,
                     createdAt = existingRecipe?.createdAt ?: System.currentTimeMillis(),
-                    updatedAt = System.currentTimeMillis()
+                    updatedAt = System.currentTimeMillis(),
+                    audioPaths = _clips.value
                 )
                 recipeRepository.saveRecipe(recipe)
+                removedSavedClips.forEach { File(it).delete() }
+                removedSavedClips.clear()
+                newClips.clear()
+                saved = true
                 _saveState.value = SaveState.Success
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -91,5 +160,10 @@ class RecipeCreatorViewModel @Inject constructor(
 
     fun resetSaveState() {
         _saveState.value = SaveState.Idle
+    }
+
+    override fun onCleared() {
+        recorder.cancel() // in-progress recording is discarded
+        if (!saved) newClips.forEach { File(it).delete() }
     }
 }
