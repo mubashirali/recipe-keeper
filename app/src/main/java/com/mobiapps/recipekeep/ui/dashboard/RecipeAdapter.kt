@@ -2,10 +2,12 @@ package com.mobiapps.recipekeep.ui.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.mobiapps.recipekeep.util.difficultyLabel
 import com.google.android.material.chip.Chip
 import com.mobiapps.recipekeep.R
 import com.mobiapps.recipekeep.databinding.ItemRecipeBinding
@@ -39,10 +41,11 @@ class RecipeAdapter(
 
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.title
-            binding.tvRecipeDescription.text = recipe.description.ifBlank { "No description" }
-            binding.tvPrepTime.text = "${recipe.prepTimeMinutes} min"
-            binding.tvServings.text = recipe.servings.toString()
-            binding.tvDifficulty.text = recipe.difficulty
+            binding.tvRecipeDescription.text = recipe.description.ifBlank { binding.root.context.getString(R.string.no_description) }
+            binding.rowStats.isVisible = recipe.prepTimeMinutes > 0 || recipe.servings > 0
+            binding.tvPrepTime.text = if (recipe.prepTimeMinutes > 0) binding.root.context.getString(R.string.minutes_short, recipe.prepTimeMinutes) else "—"
+            binding.tvServings.text = if (recipe.servings > 0) recipe.servings.toString() else "—"
+            binding.tvDifficulty.text = difficultyLabel(binding.root.context, recipe.difficulty)
 
             binding.ivRecipeImage.load(recipe.imagePath) {
                 crossfade(true)

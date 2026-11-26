@@ -9,6 +9,7 @@ import com.mobiapps.recipekeep.domain.model.Ingredient
 import com.mobiapps.recipekeep.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.File
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -30,6 +31,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun deleteRecipe(recipe: Recipe) {
         recipeDao.deleteRecipe(recipe.toEntity())
+        recipe.audioPaths.forEach { File(it).delete() }
     }
 }
 
@@ -48,7 +50,8 @@ private fun RecipeWithIngredients.toDomain() = Recipe(
     difficulty = recipe.difficulty,
     ingredients = ingredients.map(IngredientEntity::toDomain),
     createdAt = recipe.createdAt,
-    updatedAt = recipe.updatedAt
+    updatedAt = recipe.updatedAt,
+    audioPaths = recipe.audioPaths
 )
 
 private fun IngredientEntity.toDomain() = Ingredient(
@@ -63,7 +66,8 @@ private fun Recipe.toEntity() = RecipeEntity(
     tags = tags,                   // List<String>; Room invokes Converters.kt
     imagePath = imagePath,
     difficulty = difficulty,
-    createdAt = createdAt, updatedAt = updatedAt
+    createdAt = createdAt, updatedAt = updatedAt,
+    audioPaths = audioPaths
 )
 
 private fun Ingredient.toEntity() = IngredientEntity(

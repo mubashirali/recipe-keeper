@@ -16,5 +16,6 @@ data class RecipeEntity(
     val imagePath: String?,
     val difficulty: String,
     val createdAt: Long,           // epoch millis
-    val updatedAt: Long
+    val updatedAt: Long,
+    val audioPaths: List<String> = emptyList() // Voice notes; JSON via Converters.kt
 )

@@ -5,10 +5,9 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- Voice notes stay on the device (privacy, 25 MB backup cap); photos and DB are backed up. -->
+        <exclude domain="external" path="audio"/>
+        <exclude domain="file" path="audio"/>
     </cloud-backup>
     <!--
     <device-transfer>

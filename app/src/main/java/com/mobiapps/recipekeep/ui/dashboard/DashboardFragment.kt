@@ -122,7 +122,7 @@ class DashboardFragment : Fragment() {
         binding.tagChipGroup.removeAllViews()
 
         val allChip = Chip(context).apply {
-            text = "All Recipes"
+            text = getString(R.string.all_recipes)
             isCheckable = true
             isChecked = viewModel.selectedTag.value.isEmpty()
             id = View.generateViewId()

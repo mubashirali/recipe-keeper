@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,9 +20,12 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.mobiapps.recipekeep.R
 import com.mobiapps.recipekeep.databinding.FragmentRecipeViewerBinding
 import com.mobiapps.recipekeep.domain.model.Recipe
+import com.mobiapps.recipekeep.ui.common.AudioClipList
+import com.mobiapps.recipekeep.util.AudioPlayer
 import com.mobiapps.recipekeep.util.UnitConverter
 import kotlinx.coroutines.launch
 
@@ -35,6 +39,10 @@ class RecipeViewerFragment : Fragment() {
 
     private var currentServings: Int = 1
     private var baseServings: Int = 1
+
+    private val player = AudioPlayer()
+    private var clipList: AudioClipList? = null
+    private var currentClips: List<String> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,6 +68,16 @@ class RecipeViewerFragment : Fragment() {
 
         // Load recipe when args are available
         viewModel.loadRecipe(args.recipeId)
+        clipList = AudioClipList(
+            container = binding.containerClips,
+            player = player,
+            onMissing = { Snackbar.make(binding.root, R.string.recording_not_found, Snackbar.LENGTH_SHORT).show() }
+        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                player.playing.collect { clipList?.render(currentClips, it) }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.recipe.collect { recipe ->
@@ -139,14 +157,23 @@ class RecipeViewerFragment : Fragment() {
                 checkedCount++
             }
         }
-        binding.tvIngredientCount.text = "$checkedCount of $totalCount checked"
+        binding.tvIngredientCount.text = getString(R.string.checked_count, checkedCount, totalCount)
     }
 
     private fun displayRecipe(recipe: Recipe) {
         binding.tvTitle.text = recipe.title
-        binding.tvDescription.text = if (recipe.description.isNotEmpty()) recipe.description else "No description provided"
-        binding.tvPrepTime.text = "${recipe.prepTimeMinutes} mins"
-        binding.tvServings.text = currentServings.toString()
+        binding.tvDescription.text = if (recipe.description.isNotEmpty()) recipe.description else getString(R.string.no_description_provided)
+        val hasPrep = recipe.prepTimeMinutes > 0
+        val hasServings = recipe.servings > 0
+        binding.rowStats.isVisible = hasPrep || hasServings
+        binding.tvPrepTime.text = if (hasPrep) getString(R.string.minutes_short, recipe.prepTimeMinutes) else "—"
+        binding.tvServings.text = if (hasServings) currentServings.toString() else "—"
+        binding.btnIncreaseServings.isVisible = hasServings
+        binding.btnDecreaseServings.isVisible = hasServings
+
+        currentClips = recipe.audioPaths
+        binding.sectionVoice.isVisible = currentClips.isNotEmpty()
+        clipList?.render(currentClips, player.playing.value)
 
         // Clear existing views and add ingredient items
         binding.containerIngredients.removeAllViews()
@@ -183,7 +210,7 @@ class RecipeViewerFragment : Fragment() {
         } else {
             binding.progressCooking.visibility = View.GONE
             val textView = TextView(requireContext()).apply {
-                text = "No instructions provided"
+                text = getString(R.string.no_instructions)
                 setPadding(16, 16, 16, 16)
             }
             binding.containerInstructions.addView(textView)
@@ -212,7 +239,14 @@ class RecipeViewerFragment : Fragment() {
         binding.progressCooking.setProgressCompat(completedSteps, true)
     }
 
+    override fun onStop() {
+        super.onStop()
+        player.stop()
+    }
+
     override fun onDestroyView() {
+        player.stop()
+        clipList = null
         _binding?.adView?.destroy()
         super.onDestroyView()
         _binding = null

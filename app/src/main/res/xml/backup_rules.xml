@@ -6,6 +6,9 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
+    <!-- Voice notes stay on the device (privacy, 25 MB backup cap). -->
+    <exclude domain="external" path="audio"/>
+    <exclude domain="file" path="audio"/>
     <!--
    <include domain="sharedpref" path="."/>
    <exclude domain="sharedpref" path="device.xml"/>

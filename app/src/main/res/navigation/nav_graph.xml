@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.mobiapps.recipekeep.ui.dashboard.DashboardFragment"
-        android:label="Recipe Keeper"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboard_to_creator"
@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/recipeCreatorFragment"
         android:name="com.mobiapps.recipekeep.ui.creator.RecipeCreatorFragment"
-        android:label="New Recipe"
+        android:label="@string/new_recipe"
         tools:layout="@layout/fragment_recipe_creator">
         <argument
             android:name="recipeId"
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/recipeViewerFragment"
         android:name="com.mobiapps.recipekeep.ui.viewer.RecipeViewerFragment"
-        android:label="Recipe"
+        android:label="@string/recipe"
         tools:layout="@layout/fragment_recipe_viewer">
         <argument
             android:name="recipeId"

@@ -1,0 +1,82 @@
+<resources>
+    <!-- General -->
+    <string name="save">Salvar</string>
+    <string name="edit">Editar</string>
+    <string name="add">Adicionar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Excluir</string>
+    <string name="discard">Descartar</string>
+    <string name="record">Gravar</string>
+    <string name="pause">Pausar</string>
+    <string name="resume">Retomar</string>
+    <string name="stop">Parar</string>
+
+    <!-- Dashboard -->
+    <string name="tagline">Organize suas criações culinárias</string>
+    <string name="search_hint">Buscar receitas…</string>
+    <string name="all_recipes">Todas as receitas</string>
+    <string name="new_recipe">Nova receita</string>
+    <string name="no_recipes_found">Nenhuma receita encontrada</string>
+    <string name="no_recipes_hint">Tente outra busca ou adicione uma nova receita</string>
+    <string name="no_description">Sem descrição</string>
+    <string name="minutes_short">%1$d min</string>
+
+    <!-- Recipe viewer -->
+    <string name="recipe">Receita</string>
+    <string name="prep_time_label">TEMPO DE PREPARO</string>
+    <string name="servings_label">PORÇÕES</string>
+    <string name="people">pessoas</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="instructions">Modo de preparo</string>
+    <string name="checked_count">%1$d de %2$d marcados</string>
+    <string name="no_description_provided">Nenhuma descrição fornecida</string>
+    <string name="no_instructions">Nenhuma instrução fornecida</string>
+    <string name="delete_recipe">Excluir receita</string>
+    <string name="delete_recipe_confirmation_title">Excluir receita?</string>
+    <string name="delete_recipe_confirmation_message">Tem certeza de que deseja excluir \"%1$s\"? Esta ação não pode ser desfeita.</string>
+
+    <!-- Recipe creator -->
+    <string name="edit_recipe">Editar receita</string>
+    <string name="add_photo">Adicionar foto</string>
+    <string name="add_recipe_photo">Adicionar foto da receita</string>
+    <string name="take_photo">Tirar foto</string>
+    <string name="choose_gallery">Escolher da galeria</string>
+    <string name="general_info">Informações gerais</string>
+    <string name="hint_title">Título da receita</string>
+    <string name="hint_description">Descrição</string>
+    <string name="hint_prep">Preparo (min)</string>
+    <string name="hint_servings">Porções</string>
+    <string name="difficulty">Dificuldade</string>
+    <string name="difficulty_easy">Fácil</string>
+    <string name="difficulty_medium">Médio</string>
+    <string name="difficulty_hard">Difícil</string>
+    <string name="hint_steps">Passos (um por linha)</string>
+    <string name="tags">Tags</string>
+    <string name="hint_categories">Categorias (separadas por vírgula)</string>
+    <string name="hint_ingredient">Ingrediente</string>
+    <string name="hint_qty">Qtd.</string>
+    <string name="hint_unit">Unidade</string>
+    <string name="remove_ingredient">Remover ingrediente</string>
+    <string name="add_something_first">Adicione algo primeiro: texto, uma foto ou uma nota de voz</string>
+    <string name="save_failed">Falha ao salvar: %1$s</string>
+    <string name="voice_recipe_title">Receita por voz</string>
+    <string name="untitled_recipe_title">Receita sem título</string>
+    <string name="discard_title">Descartar alterações?</string>
+    <string name="discard_message">Você tem alterações não salvas. Se sair agora, elas serão perdidas.</string>
+    <string name="keep_editing">Continuar editando</string>
+
+    <!-- Voice notes -->
+    <string name="voice_notes">Notas de voz</string>
+    <string name="voice_notes_hint">Opcional. Fale a receita no seu próprio idioma.</string>
+    <string name="voice_note_n">Nota de voz %1$d</string>
+    <string name="play_voice_note_n">Reproduzir nota de voz %1$d</string>
+    <string name="pause_voice_note_n">Pausar nota de voz %1$d</string>
+    <string name="delete_voice_note_n">Excluir nota de voz %1$d</string>
+    <string name="mic_permission_needed">A permissão do microfone é necessária para gravar</string>
+    <string name="recording_not_found">Gravação não encontrada</string>
+    <string name="rec_stopped_saved">Gravação interrompida. Clipe salvo.</string>
+    <string name="rec_stopped_failed">A gravação foi interrompida inesperadamente e não pôde ser salva</string>
+    <string name="rec_start_failed">Não foi possível iniciar a gravação. O microfone está em uso?</string>
+    <string name="rec_failed">Falha na gravação</string>
+    <string name="rec_too_short">A gravação foi muito curta ou falhou</string>
+</resources>

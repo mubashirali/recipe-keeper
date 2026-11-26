@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -58,5 +59,21 @@ class RecipeDaoTest {
         assertEquals("Pasta", result!!.recipe.title)
         assertEquals(1, result.ingredients.size)
         assertEquals("Flour", result.ingredients[0].name)
+    }
+
+    @Test
+    fun audioPaths_roundTrip_andDefaultsToEmpty() = runTest {
+        val base = RecipeEntity(
+            id = "a1", userId = null, title = "Voice", description = "",
+            prepTimeMinutes = 0, servings = 0,
+            instructions = emptyList(), tags = emptyList(),
+            imagePath = null, difficulty = "Medium",
+            createdAt = 1L, updatedAt = 1L
+        )
+        recipeDao.insertRecipe(base)
+        recipeDao.insertRecipe(base.copy(id = "a2", audioPaths = listOf("/x/1.m4a", "/x/2.m4a")))
+
+        assertTrue(recipeDao.getRecipeById("a1").first()!!.recipe.audioPaths.isEmpty())
+        assertEquals(listOf("/x/1.m4a", "/x/2.m4a"), recipeDao.getRecipeById("a2").first()!!.recipe.audioPaths)
     }
 }
