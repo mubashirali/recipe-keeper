@@ -1,6 +1,8 @@
 package com.mobiapps.recipekeep.ui.creator
 
 import android.content.Context
+import androidx.annotation.StringRes
+import com.mobiapps.recipekeep.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobiapps.recipekeep.data.repository.RecipeRepository
@@ -43,6 +45,8 @@ class RecipeCreatorViewModel @Inject constructor(
     val recipeToEdit: StateFlow<Recipe?> = _recipeToEdit.asStateFlow()
 
     // --- Voice notes ---
+    private val appContext = context.applicationContext
+    private fun str(@StringRes id: Int) = appContext.getString(id)
     private val recorder = AudioRecorder(context)
     val recState: StateFlow<RecState> = recorder.state
     fun elapsedMs(): Long = recorder.elapsedMs()
@@ -63,8 +67,8 @@ class RecipeCreatorViewModel @Inject constructor(
         // Max-duration cap or a MediaRecorder error stopped the take by itself.
         recorder.onSystemStop = { result ->
             result
-                .onSuccess { addClip(it); _messages.tryEmit("Recording stopped. Clip saved.") }
-                .onFailure { _messages.tryEmit("Recording stopped unexpectedly and couldn't be saved") }
+                .onSuccess { addClip(it); _messages.tryEmit(str(R.string.rec_stopped_saved)) }
+                .onFailure { _messages.tryEmit(str(R.string.rec_stopped_failed)) }
         }
     }
 
@@ -82,23 +86,26 @@ class RecipeCreatorViewModel @Inject constructor(
     }
 
     fun startRecording() {
-        recorder.start().onFailure { _messages.tryEmit("Couldn't start recording. Is the microphone in use?") }
+        recorder.start().onFailure { _messages.tryEmit(str(R.string.rec_start_failed)) }
     }
 
     fun pauseRecording() {
-        recorder.pause().onFailure { recorder.cancel(); _messages.tryEmit("Recording failed") }
+        recorder.pause().onFailure { recorder.cancel(); _messages.tryEmit(str(R.string.rec_failed)) }
     }
 
     fun resumeRecording() {
-        recorder.resume().onFailure { recorder.cancel(); _messages.tryEmit("Recording failed") }
+        recorder.resume().onFailure { recorder.cancel(); _messages.tryEmit(str(R.string.rec_failed)) }
     }
 
     fun stopRecording() {
         if (recorder.state.value == RecState.Idle) return
         recorder.stop()
             .onSuccess { addClip(it) }
-            .onFailure { _messages.tryEmit("Recording was too short or failed") }
+            .onFailure { _messages.tryEmit(str(R.string.rec_too_short)) }
     }
+
+    /** True if clips were added or removed since the screen opened (drives the discard prompt). */
+    fun hasClipChanges(): Boolean = newClips.isNotEmpty() || removedSavedClips.isNotEmpty()
 
     fun removeClip(path: String) {
         if (path !in _clips.value) return
