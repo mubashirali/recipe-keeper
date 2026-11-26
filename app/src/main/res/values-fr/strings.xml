@@ -1,0 +1,82 @@
+<resources>
+    <!-- General -->
+    <string name="save">Sauvegarder</string>
+    <string name="edit">Modifier</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="discard">Abandonner</string>
+    <string name="record">Enregistrer</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Reprendre</string>
+    <string name="stop">Arrêter</string>
+
+    <!-- Dashboard -->
+    <string name="tagline">Organisez vos créations culinaires</string>
+    <string name="search_hint">Rechercher des recettes…</string>
+    <string name="all_recipes">Toutes les recettes</string>
+    <string name="new_recipe">Nouvelle recette</string>
+    <string name="no_recipes_found">Aucune recette trouvée</string>
+    <string name="no_recipes_hint">Essayez une autre recherche ou ajoutez une nouvelle recette</string>
+    <string name="no_description">Aucune description</string>
+    <string name="minutes_short">%1$d min</string>
+
+    <!-- Recipe viewer -->
+    <string name="recipe">Recette</string>
+    <string name="prep_time_label">TEMPS DE PRÉPARATION</string>
+    <string name="servings_label">PORTIONS</string>
+    <string name="people">personnes</string>
+    <string name="ingredients">Ingrédients</string>
+    <string name="instructions">Instructions</string>
+    <string name="checked_count">%1$d sur %2$d cochés</string>
+    <string name="no_description_provided">Aucune description fournie</string>
+    <string name="no_instructions">Aucune instruction fournie</string>
+    <string name="delete_recipe">Supprimer la recette</string>
+    <string name="delete_recipe_confirmation_title">Supprimer la recette ?</string>
+    <string name="delete_recipe_confirmation_message">Voulez-vous vraiment supprimer \"%1$s\" ? Cette action est irréversible.</string>
+
+    <!-- Recipe creator -->
+    <string name="edit_recipe">Modifier la recette</string>
+    <string name="add_photo">Ajouter une photo</string>
+    <string name="add_recipe_photo">Ajouter une photo de la recette</string>
+    <string name="take_photo">Prendre une photo</string>
+    <string name="choose_gallery">Choisir dans la galerie</string>
+    <string name="general_info">Infos générales</string>
+    <string name="hint_title">Titre de la recette</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_prep">Préparation (min)</string>
+    <string name="hint_servings">Portions</string>
+    <string name="difficulty">Difficulté</string>
+    <string name="difficulty_easy">Facile</string>
+    <string name="difficulty_medium">Moyen</string>
+    <string name="difficulty_hard">Difficile</string>
+    <string name="hint_steps">Étapes (une par ligne)</string>
+    <string name="tags">Étiquettes</string>
+    <string name="hint_categories">Catégories (séparées par des virgules)</string>
+    <string name="hint_ingredient">Ingrédient</string>
+    <string name="hint_qty">Qté</string>
+    <string name="hint_unit">Unité</string>
+    <string name="remove_ingredient">Supprimer l\'ingrédient</string>
+    <string name="add_something_first">Ajoutez d\'abord quelque chose : du texte, une photo ou une note vocale</string>
+    <string name="save_failed">Échec de la sauvegarde : %1$s</string>
+    <string name="voice_recipe_title">Recette vocale</string>
+    <string name="untitled_recipe_title">Recette sans titre</string>
+    <string name="discard_title">Abandonner les modifications ?</string>
+    <string name="discard_message">Vous avez des modifications non sauvegardées. Si vous quittez maintenant, elles seront perdues.</string>
+    <string name="keep_editing">Continuer à modifier</string>
+
+    <!-- Voice notes -->
+    <string name="voice_notes">Notes vocales</string>
+    <string name="voice_notes_hint">Facultatif. Dictez la recette dans votre propre langue.</string>
+    <string name="voice_note_n">Note vocale %1$d</string>
+    <string name="play_voice_note_n">Lire la note vocale %1$d</string>
+    <string name="pause_voice_note_n">Mettre en pause la note vocale %1$d</string>
+    <string name="delete_voice_note_n">Supprimer la note vocale %1$d</string>
+    <string name="mic_permission_needed">L\'autorisation du micro est nécessaire pour enregistrer</string>
+    <string name="recording_not_found">Enregistrement introuvable</string>
+    <string name="rec_stopped_saved">Enregistrement arrêté. Clip sauvegardé.</string>
+    <string name="rec_stopped_failed">L\'enregistrement s\'est arrêté de manière inattendue et n\'a pas pu être sauvegardé</string>
+    <string name="rec_start_failed">Impossible de démarrer l\'enregistrement. Le micro est-il utilisé ?</string>
+    <string name="rec_failed">Échec de l\'enregistrement</string>
+    <string name="rec_too_short">L\'enregistrement était trop court ou a échoué</string>
+</resources>

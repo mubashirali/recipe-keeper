@@ -1,0 +1,82 @@
+<resources>
+    <!-- General -->
+    <string name="save">Speichern</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="add">Hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="delete">Löschen</string>
+    <string name="discard">Verwerfen</string>
+    <string name="record">Aufnehmen</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Fortsetzen</string>
+    <string name="stop">Stopp</string>
+
+    <!-- Dashboard -->
+    <string name="tagline">Organisiere deine kulinarischen Kreationen</string>
+    <string name="search_hint">Rezepte suchen…</string>
+    <string name="all_recipes">Alle Rezepte</string>
+    <string name="new_recipe">Neues Rezept</string>
+    <string name="no_recipes_found">Keine Rezepte gefunden</string>
+    <string name="no_recipes_hint">Versuche eine andere Suche oder füge ein neues Rezept hinzu</string>
+    <string name="no_description">Keine Beschreibung</string>
+    <string name="minutes_short">%1$d Min.</string>
+
+    <!-- Recipe viewer -->
+    <string name="recipe">Rezept</string>
+    <string name="prep_time_label">ZUBEREITUNGSZEIT</string>
+    <string name="servings_label">PORTIONEN</string>
+    <string name="people">Personen</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="instructions">Zubereitung</string>
+    <string name="checked_count">%1$d von %2$d abgehakt</string>
+    <string name="no_description_provided">Keine Beschreibung vorhanden</string>
+    <string name="no_instructions">Keine Anleitung vorhanden</string>
+    <string name="delete_recipe">Rezept löschen</string>
+    <string name="delete_recipe_confirmation_title">Rezept löschen?</string>
+    <string name="delete_recipe_confirmation_message">Möchtest du \"%1$s\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+
+    <!-- Recipe creator -->
+    <string name="edit_recipe">Rezept bearbeiten</string>
+    <string name="add_photo">Foto hinzufügen</string>
+    <string name="add_recipe_photo">Rezeptfoto hinzufügen</string>
+    <string name="take_photo">Foto aufnehmen</string>
+    <string name="choose_gallery">Aus Galerie wählen</string>
+    <string name="general_info">Allgemeine Infos</string>
+    <string name="hint_title">Rezepttitel</string>
+    <string name="hint_description">Beschreibung</string>
+    <string name="hint_prep">Zubereitung (Min.)</string>
+    <string name="hint_servings">Portionen</string>
+    <string name="difficulty">Schwierigkeit</string>
+    <string name="difficulty_easy">Einfach</string>
+    <string name="difficulty_medium">Mittel</string>
+    <string name="difficulty_hard">Schwer</string>
+    <string name="hint_steps">Schritte (einer pro Zeile)</string>
+    <string name="tags">Tags</string>
+    <string name="hint_categories">Kategorien (durch Komma getrennt)</string>
+    <string name="hint_ingredient">Zutat</string>
+    <string name="hint_qty">Menge</string>
+    <string name="hint_unit">Einheit</string>
+    <string name="remove_ingredient">Zutat entfernen</string>
+    <string name="add_something_first">Füge zuerst etwas hinzu: Text, ein Foto oder eine Sprachnotiz</string>
+    <string name="save_failed">Speichern fehlgeschlagen: %1$s</string>
+    <string name="voice_recipe_title">Sprachrezept</string>
+    <string name="untitled_recipe_title">Unbenanntes Rezept</string>
+    <string name="discard_title">Änderungen verwerfen?</string>
+    <string name="discard_message">Du hast ungespeicherte Änderungen. Wenn du jetzt gehst, gehen sie verloren.</string>
+    <string name="keep_editing">Weiter bearbeiten</string>
+
+    <!-- Voice notes -->
+    <string name="voice_notes">Sprachnotizen</string>
+    <string name="voice_notes_hint">Optional. Sprich das Rezept in deiner eigenen Sprache ein.</string>
+    <string name="voice_note_n">Sprachnotiz %1$d</string>
+    <string name="play_voice_note_n">Sprachnotiz %1$d abspielen</string>
+    <string name="pause_voice_note_n">Sprachnotiz %1$d pausieren</string>
+    <string name="delete_voice_note_n">Sprachnotiz %1$d löschen</string>
+    <string name="mic_permission_needed">Für die Aufnahme wird die Mikrofonberechtigung benötigt</string>
+    <string name="recording_not_found">Aufnahme nicht gefunden</string>
+    <string name="rec_stopped_saved">Aufnahme gestoppt. Clip gespeichert.</string>
+    <string name="rec_stopped_failed">Die Aufnahme wurde unerwartet gestoppt und konnte nicht gespeichert werden</string>
+    <string name="rec_start_failed">Aufnahme konnte nicht gestartet werden. Wird das Mikrofon gerade verwendet?</string>
+    <string name="rec_failed">Aufnahme fehlgeschlagen</string>
+    <string name="rec_too_short">Die Aufnahme war zu kurz oder ist fehlgeschlagen</string>
+</resources>

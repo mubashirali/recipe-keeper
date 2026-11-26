@@ -1,8 +1,84 @@
 <resources>
-    <string name="app_name">Recipe Keeper</string>
+    <string name="app_name" translatable="false">Recipe Keeper</string>
+
+    <!-- General -->
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="discard">Discard</string>
+    <string name="record">Record</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="stop">Stop</string>
+
+    <!-- Dashboard -->
+    <string name="tagline">Organize your culinary creations</string>
+    <string name="search_hint">Search recipes…</string>
+    <string name="all_recipes">All Recipes</string>
+    <string name="new_recipe">New Recipe</string>
+    <string name="no_recipes_found">No recipes found</string>
+    <string name="no_recipes_hint">Try a different search or add a new recipe</string>
+    <string name="no_description">No description</string>
+    <string name="minutes_short">%1$d min</string>
+
+    <!-- Recipe viewer -->
+    <string name="recipe">Recipe</string>
+    <string name="prep_time_label">PREP TIME</string>
+    <string name="servings_label">SERVINGS</string>
+    <string name="people">people</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="checked_count">%1$d of %2$d checked</string>
+    <string name="no_description_provided">No description provided</string>
+    <string name="no_instructions">No instructions provided</string>
     <string name="delete_recipe">Delete recipe</string>
     <string name="delete_recipe_confirmation_title">Delete Recipe?</string>
     <string name="delete_recipe_confirmation_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete">Delete</string>
+
+    <!-- Recipe creator -->
+    <string name="edit_recipe">Edit Recipe</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="add_recipe_photo">Add Recipe Photo</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_gallery">Choose from Gallery</string>
+    <string name="general_info">General Info</string>
+    <string name="hint_title">Recipe Title</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_prep">Prep (min)</string>
+    <string name="hint_servings">Servings</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="hint_steps">Steps (one per line)</string>
+    <string name="tags">Tags</string>
+    <string name="hint_categories">Categories (comma-separated)</string>
+    <string name="hint_ingredient">Ingredient</string>
+    <string name="hint_qty">Qty</string>
+    <string name="hint_unit">Unit</string>
+    <string name="remove_ingredient">Remove ingredient</string>
+    <string name="add_something_first">Add something first: text, a photo, or a voice note</string>
+    <string name="save_failed">Failed to save: %1$s</string>
+    <string name="voice_recipe_title">Voice recipe</string>
+    <string name="untitled_recipe_title">Untitled recipe</string>
+    <string name="discard_title">Discard changes?</string>
+    <string name="discard_message">You have unsaved changes. If you leave now, they will be lost.</string>
+    <string name="keep_editing">Keep editing</string>
+
+    <!-- Voice notes -->
+    <string name="voice_notes">Voice notes</string>
+    <string name="voice_notes_hint">Optional. Say the recipe in your own language.</string>
+    <string name="voice_note_n">Voice note %1$d</string>
+    <string name="play_voice_note_n">Play voice note %1$d</string>
+    <string name="pause_voice_note_n">Pause voice note %1$d</string>
+    <string name="delete_voice_note_n">Delete voice note %1$d</string>
+    <string name="mic_permission_needed">Microphone permission is needed to record</string>
+    <string name="recording_not_found">Recording not found</string>
+    <string name="rec_stopped_saved">Recording stopped. Clip saved.</string>
+    <string name="rec_stopped_failed">Recording stopped unexpectedly and couldn\'t be saved</string>
+    <string name="rec_start_failed">Couldn\'t start recording. Is the microphone in use?</string>
+    <string name="rec_failed">Recording failed</string>
+    <string name="rec_too_short">Recording was too short or failed</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,7 +13,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Recipe"
+            app:title="@string/recipe"
             app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -51,7 +52,7 @@
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp"
-                        android:text="Recipe Title" />
+                        tools:text="Recipe Title" />
 
                     <TextView
                         android:id="@+id/tv_description"
@@ -60,7 +61,7 @@
                         android:textAppearance="?attr/textAppearanceBodyLarge"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_marginBottom="20dp"
-                        android:text="A delicious description of the recipe goes here." />
+                        tools:text="A delicious description of the recipe goes here." />
 
                     <LinearLayout
                         android:id="@+id/row_stats"
@@ -78,7 +79,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="PREP TIME"
+                                android:text="@string/prep_time_label"
                                 android:textAppearance="?attr/textAppearanceLabelMedium"
                                 android:textColor="?attr/colorPrimary"
                                 android:textStyle="bold" />
@@ -87,7 +88,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                                android:text="30 mins"
+                                tools:text="30 mins"
                                 android:layout_marginTop="4dp" />
                         </LinearLayout>
 
@@ -106,7 +107,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="SERVINGS"
+                                android:text="@string/servings_label"
                                 android:textAppearance="?attr/textAppearanceLabelMedium"
                                 android:textColor="?attr/colorPrimary"
                                 android:textStyle="bold" />
@@ -129,7 +130,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="?attr/textAppearanceTitleMedium"
-                                    android:text="4"
+                                    tools:text="4"
                                     android:layout_marginHorizontal="8dp" />
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_increase_servings"
@@ -143,7 +144,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="people"
+                                android:text="@string/people"
                                 android:textAppearance="?attr/textAppearanceLabelSmall"
                                 android:textColor="?attr/colorOnSurfaceVariant" />
                         </LinearLayout>
@@ -185,7 +186,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ingredients"
+                        android:text="@string/ingredients"
                         android:textAppearance="?attr/textAppearanceTitleLarge"
                         android:textStyle="bold" />
                     <TextView
@@ -194,7 +195,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?attr/textAppearanceLabelSmall"
                         android:textColor="?attr/colorOnSurfaceVariant"
-                        android:text="0 of 0 checked" />
+                        tools:text="0 of 0 checked" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -224,7 +225,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Voice notes"
+                    android:text="@string/voice_notes"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textStyle="bold" />
 
@@ -246,7 +247,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Instructions"
+                android:text="@string/instructions"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />

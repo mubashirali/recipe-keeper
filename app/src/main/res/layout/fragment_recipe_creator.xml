@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="New Recipe"
+            app:title="@string/new_recipe"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:menu="@menu/menu_creator" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginBottom="16dp"
-                        android:text="Add Photo"
+                        android:text="@string/add_photo"
                         app:icon="@android:drawable/ic_menu_camera" />
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -80,7 +80,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Voice notes"
+                        android:text="@string/voice_notes"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
                         android:textStyle="bold" />
@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Optional. Say the recipe in your own language."
+                        android:text="@string/voice_notes_hint"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -105,7 +105,7 @@
                             style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Record"
+                            android:text="@string/record"
                             app:icon="@android:drawable/ic_btn_speak_now" />
 
                         <com.google.android.material.button.MaterialButton
@@ -113,7 +113,7 @@
                             style="@style/Widget.Material3.Button.TonalButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pause"
+                            android:text="@string/pause"
                             android:visibility="gone" />
 
                         <com.google.android.material.button.MaterialButton
@@ -122,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Stop"
+                            android:text="@string/stop"
                             android:visibility="gone" />
 
                         <Chronometer
@@ -160,7 +160,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="General Info"
+                        android:text="@string/general_info"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
                         android:textStyle="bold"
@@ -171,7 +171,7 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Recipe Title"
+                        android:hint="@string/hint_title"
                         android:layout_marginBottom="16dp"
                         app:startIconDrawable="@drawable/ic_edit">
                         <com.google.android.material.textfield.TextInputEditText
@@ -186,7 +186,7 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Description"
+                        android:hint="@string/hint_description"
                         android:layout_marginBottom="16dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_description"
@@ -207,7 +207,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Prep (min)"
+                            android:hint="@string/hint_prep"
                             android:layout_marginEnd="8dp">
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_prep_time"
@@ -222,7 +222,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Servings">
+                        android:hint="@string/hint_servings">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_servings"
                             android:layout_width="match_parent"
@@ -234,7 +234,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Difficulty"
+                    android:text="@string/difficulty"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginTop="16dp"
@@ -251,20 +251,20 @@
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Easy" />
+                        android:text="@string/difficulty_easy" />
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_medium"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Medium"
+                        android:text="@string/difficulty_medium"
                         android:checked="true" />
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_hard"
                         style="@style/Widget.Material3.Chip.Filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hard" />
+                        android:text="@string/difficulty_hard" />
                 </com.google.android.material.chip.ChipGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -293,7 +293,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ingredients"
+                            android:text="@string/ingredients"
                             android:textAppearance="?attr/textAppearanceTitleMedium"
                             android:textColor="?attr/colorPrimary"
                             android:textStyle="bold" />
@@ -302,7 +302,7 @@
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Add"
+                            android:text="@string/add"
                             app:icon="@android:drawable/ic_input_add" />
                     </LinearLayout>
 
@@ -331,7 +331,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Instructions"
+                        android:text="@string/instructions"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
                         android:textStyle="bold"
@@ -342,7 +342,7 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Steps (one per line)">
+                        android:hint="@string/hint_steps">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_instructions"
                             android:layout_width="match_parent"
@@ -370,7 +370,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tags"
+                        android:text="@string/tags"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
                         android:textStyle="bold"
@@ -381,7 +381,7 @@
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Categories (comma-separated)">
+                        android:hint="@string/hint_categories">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_tags"
                             android:layout_width="match_parent"

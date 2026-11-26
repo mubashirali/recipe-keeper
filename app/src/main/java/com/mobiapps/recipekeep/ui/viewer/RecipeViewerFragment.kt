@@ -71,7 +71,7 @@ class RecipeViewerFragment : Fragment() {
         clipList = AudioClipList(
             container = binding.containerClips,
             player = player,
-            onMissing = { Snackbar.make(binding.root, "Recording not found", Snackbar.LENGTH_SHORT).show() }
+            onMissing = { Snackbar.make(binding.root, R.string.recording_not_found, Snackbar.LENGTH_SHORT).show() }
         )
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -157,16 +157,16 @@ class RecipeViewerFragment : Fragment() {
                 checkedCount++
             }
         }
-        binding.tvIngredientCount.text = "$checkedCount of $totalCount checked"
+        binding.tvIngredientCount.text = getString(R.string.checked_count, checkedCount, totalCount)
     }
 
     private fun displayRecipe(recipe: Recipe) {
         binding.tvTitle.text = recipe.title
-        binding.tvDescription.text = if (recipe.description.isNotEmpty()) recipe.description else "No description provided"
+        binding.tvDescription.text = if (recipe.description.isNotEmpty()) recipe.description else getString(R.string.no_description_provided)
         val hasPrep = recipe.prepTimeMinutes > 0
         val hasServings = recipe.servings > 0
         binding.rowStats.isVisible = hasPrep || hasServings
-        binding.tvPrepTime.text = if (hasPrep) "${recipe.prepTimeMinutes} mins" else "—"
+        binding.tvPrepTime.text = if (hasPrep) getString(R.string.minutes_short, recipe.prepTimeMinutes) else "—"
         binding.tvServings.text = if (hasServings) currentServings.toString() else "—"
         binding.btnIncreaseServings.isVisible = hasServings
         binding.btnDecreaseServings.isVisible = hasServings
@@ -210,7 +210,7 @@ class RecipeViewerFragment : Fragment() {
         } else {
             binding.progressCooking.visibility = View.GONE
             val textView = TextView(requireContext()).apply {
-                text = "No instructions provided"
+                text = getString(R.string.no_instructions)
                 setPadding(16, 16, 16, 16)
             }
             binding.containerInstructions.addView(textView)

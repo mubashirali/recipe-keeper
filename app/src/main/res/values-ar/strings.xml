@@ -1,0 +1,82 @@
+<resources>
+    <!-- General -->
+    <string name="save">حفظ</string>
+    <string name="edit">تعديل</string>
+    <string name="add">إضافة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="delete">حذف</string>
+    <string name="discard">تجاهل</string>
+    <string name="record">تسجيل</string>
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="resume">استئناف</string>
+    <string name="stop">إيقاف</string>
+
+    <!-- Dashboard -->
+    <string name="tagline">نظّم إبداعاتك في الطبخ</string>
+    <string name="search_hint">ابحث عن وصفات…</string>
+    <string name="all_recipes">كل الوصفات</string>
+    <string name="new_recipe">وصفة جديدة</string>
+    <string name="no_recipes_found">لم يتم العثور على وصفات</string>
+    <string name="no_recipes_hint">جرّب بحثًا مختلفًا أو أضف وصفة جديدة</string>
+    <string name="no_description">بدون وصف</string>
+    <string name="minutes_short">%1$d د</string>
+
+    <!-- Recipe viewer -->
+    <string name="recipe">وصفة</string>
+    <string name="prep_time_label">وقت التحضير</string>
+    <string name="servings_label">عدد الحصص</string>
+    <string name="people">أشخاص</string>
+    <string name="ingredients">المكوّنات</string>
+    <string name="instructions">طريقة التحضير</string>
+    <string name="checked_count">تم تحديد %1$d من %2$d</string>
+    <string name="no_description_provided">لا يوجد وصف</string>
+    <string name="no_instructions">لا توجد تعليمات</string>
+    <string name="delete_recipe">حذف الوصفة</string>
+    <string name="delete_recipe_confirmation_title">حذف الوصفة؟</string>
+    <string name="delete_recipe_confirmation_message">هل تريد حذف \"%1$s\" بالتأكيد؟ لا يمكن التراجع عن هذا الإجراء.</string>
+
+    <!-- Recipe creator -->
+    <string name="edit_recipe">تعديل الوصفة</string>
+    <string name="add_photo">إضافة صورة</string>
+    <string name="add_recipe_photo">إضافة صورة للوصفة</string>
+    <string name="take_photo">التقاط صورة</string>
+    <string name="choose_gallery">اختيار من المعرض</string>
+    <string name="general_info">معلومات عامة</string>
+    <string name="hint_title">عنوان الوصفة</string>
+    <string name="hint_description">الوصف</string>
+    <string name="hint_prep">التحضير (دقيقة)</string>
+    <string name="hint_servings">عدد الحصص</string>
+    <string name="difficulty">الصعوبة</string>
+    <string name="difficulty_easy">سهل</string>
+    <string name="difficulty_medium">متوسط</string>
+    <string name="difficulty_hard">صعب</string>
+    <string name="hint_steps">الخطوات (خطوة في كل سطر)</string>
+    <string name="tags">الوسوم</string>
+    <string name="hint_categories">الفئات (مفصولة بفواصل)</string>
+    <string name="hint_ingredient">المكوّن</string>
+    <string name="hint_qty">الكمية</string>
+    <string name="hint_unit">الوحدة</string>
+    <string name="remove_ingredient">إزالة المكوّن</string>
+    <string name="add_something_first">أضف شيئًا أولًا: نصًا أو صورة أو ملاحظة صوتية</string>
+    <string name="save_failed">فشل الحفظ: %1$s</string>
+    <string name="voice_recipe_title">وصفة صوتية</string>
+    <string name="untitled_recipe_title">وصفة بلا عنوان</string>
+    <string name="discard_title">تجاهل التغييرات؟</string>
+    <string name="discard_message">لديك تغييرات غير محفوظة. إذا غادرت الآن فستُفقد.</string>
+    <string name="keep_editing">متابعة التعديل</string>
+
+    <!-- Voice notes -->
+    <string name="voice_notes">ملاحظات صوتية</string>
+    <string name="voice_notes_hint">اختياري. قُل الوصفة بلغتك الخاصة.</string>
+    <string name="voice_note_n">ملاحظة صوتية %1$d</string>
+    <string name="play_voice_note_n">تشغيل الملاحظة الصوتية %1$d</string>
+    <string name="pause_voice_note_n">إيقاف الملاحظة الصوتية %1$d مؤقتًا</string>
+    <string name="delete_voice_note_n">حذف الملاحظة الصوتية %1$d</string>
+    <string name="mic_permission_needed">إذن الميكروفون مطلوب للتسجيل</string>
+    <string name="recording_not_found">لم يتم العثور على التسجيل</string>
+    <string name="rec_stopped_saved">توقف التسجيل. تم حفظ المقطع.</string>
+    <string name="rec_stopped_failed">توقف التسجيل بشكل غير متوقع وتعذّر حفظه</string>
+    <string name="rec_start_failed">تعذّر بدء التسجيل. هل الميكروفون قيد الاستخدام؟</string>
+    <string name="rec_failed">فشل التسجيل</string>
+    <string name="rec_too_short">كان التسجيل قصيرًا جدًا أو فشل</string>
+</resources>

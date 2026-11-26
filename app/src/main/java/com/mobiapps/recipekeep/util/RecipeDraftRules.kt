@@ -11,9 +11,15 @@ object RecipeDraftRules {
         hasImage || hasAudio || textFields.any { it.isNotBlank() }
 
     /** Typed title wins; otherwise "Voice recipe · 23 Nov" / "Untitled recipe · 23 Nov". */
-    fun resolveTitle(title: String, hasAudio: Boolean, nowMillis: Long): String {
+    fun resolveTitle(
+        title: String,
+        hasAudio: Boolean,
+        nowMillis: Long,
+        voiceTitle: String = "Voice recipe",
+        untitledTitle: String = "Untitled recipe"
+    ): String {
         if (title.isNotBlank()) return title.trim()
         val date = SimpleDateFormat("d MMM", Locale.getDefault()).format(Date(nowMillis))
-        return (if (hasAudio) "Voice recipe" else "Untitled recipe") + " · $date"
+        return (if (hasAudio) voiceTitle else untitledTitle) + " · $date"
     }
 }
